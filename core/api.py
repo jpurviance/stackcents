@@ -1,3 +1,4 @@
+import collections
 from django.http import JsonResponse
 from django.http import HttpResponseNotFound, HttpResponse
 from django.urls import reverse
@@ -9,13 +10,11 @@ def echo(request):
     post = request.POST
     print(dict(post))
     return HttpResponse(status=200)
-'''
-import collections
+
+
 map = collections.defaultdict(int)
 @csrf_exempt
-def count(request):
-    get = request.GET
-    print(get)
-    map[count] += 1
-    return JsonResponse({"Count" : map[count]})
-'''
+def count(request,number):
+    map[number] += 1
+    return JsonResponse({"Count" : map[number]})
+
