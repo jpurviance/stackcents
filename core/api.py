@@ -4,7 +4,6 @@ from django.http import HttpResponseNotFound, HttpResponse
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
-from stackcents.settings import countmap
 @csrf_exempt
 def echo(request):
     post = request.POST
@@ -15,6 +14,5 @@ def echo(request):
 
 @csrf_exempt
 def count(request,number):
-    countmap[number] += int(number)
-    return JsonResponse({"Count" : countmap[number]})
+    return JsonResponse({"Count" : "why"})
 
