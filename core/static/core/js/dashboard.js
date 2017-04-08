@@ -69,6 +69,24 @@ var ranges = [
         [1248998400000, 13.6]
     ];
 
+
+// var temp= [{
+//             name: 'Installation',
+//             data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
+//         }, {
+//             name: 'Manufacturing',
+//             data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
+//         }, {
+//             name: 'Sales & Distribution',
+//             data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
+//         }, {
+//             name: 'Project Development',
+//             data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
+//         }, {
+//             name: 'Other',
+//             data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
+//         }];
+
 var master_theme = {
     colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
         '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
@@ -278,9 +296,7 @@ function populate_cloud_stats(json) {
     }
 }
 
-
-$(document).ready(function () {
-
+function draw_all(data) {
     Highcharts.theme = master_theme;
     Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
@@ -309,24 +325,16 @@ $(document).ready(function () {
             }
         },
 
-        series: [{
-            name: 'Installation',
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-        }, {
-            name: 'Manufacturing',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-        }, {
-            name: 'Sales & Distribution',
-            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-        }, {
-            name: 'Project Development',
-            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-        }, {
-            name: 'Other',
-            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-        }]
+        series: data
 
     }));
+}
+
+
+$(document).ready(function () {
+
+    Highcharts.theme = master_theme;
+
     Highcharts.chart('container', Highcharts.merge(Highcharts.theme, {
 
         title: {
@@ -376,6 +384,11 @@ $(document).ready(function () {
         $.get("/get_instances_summary/", populate_cloud_stats);
     }, 5000);
 
+    $.get("/get_all_time_series/", function (data) {
+        var draw = [];
+        draw.append({"CPU": data["cpu_time_series"]});
+        draw_all(draw);
+    });
 
 });
 
