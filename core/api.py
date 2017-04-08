@@ -95,7 +95,7 @@ def get_instance_details(request):
              'storage': list(sorted(data['storage'], key=lambda x: x['index']))[-1]['%util'],
              'metadata': {
                  "num_cpu": data['meta']['num_cpu']['num_cpu'],
-                 "os":  "???????????!?!?!?!?!?",
+                 "os":  data["meta"]["os"],
                  "hostname": data['meta']['hostname'],
                  "type": data['meta']['instance-type'],
                  "ip": data['meta']['public-ipv4'],
@@ -119,9 +119,6 @@ def get_recommendation(request):
     return JsonResponse({'recommendation': "You should Download more ram",
                          'justification': "You are running out of ram"})
 
-
-def get_mem_timeseries(data):
-    pass
 
 
 @csrf_exempt
