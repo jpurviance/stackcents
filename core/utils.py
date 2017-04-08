@@ -27,7 +27,7 @@ def get_json(ec2):
 
 
 def get_cpu_timeseries(instance):
-    data = get_json(instance)
+    data = instance
     all_cpus = list(sorted(data['cpu'], key=lambda x: x['index']))
     return [cpu['load_avg_1'] for cpu in all_cpus]
 
@@ -41,6 +41,6 @@ def get_all_cpu_timeseries():
         lll = []
         for x in l:
             if i < len(x):
-                lll.append(x[i])
+                lll.append(float(x[i]))
         ll.append(sum(lll) / float(len(lll)))
     return ll

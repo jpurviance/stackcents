@@ -296,7 +296,7 @@ function populate_cloud_stats(json) {
     }
 }
 
-function draw_all(data) {
+function draw_multi_chart(data) {
     Highcharts.theme = master_theme;
     Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
@@ -335,50 +335,50 @@ $(document).ready(function () {
 
     Highcharts.theme = master_theme;
 
-    Highcharts.chart('container', Highcharts.merge(Highcharts.theme, {
-
-        title: {
-            text: 'July temperatures'
-        },
-
-        xAxis: {
-            type: 'datetime'
-        },
-
-        yAxis: {
-            title: {
-                text: null
-            }
-        },
-
-        tooltip: {
-            crosshairs: true,
-            shared: true,
-            valueSuffix: '°C'
-        },
-
-        legend: {},
-
-        series: [{
-            name: 'Temperature',
-            data: averages,
-            zIndex: 1,
-            marker: {
-                fillColor: 'white',
-                lineWidth: 2,
-                lineColor: Highcharts.getOptions().colors[0]
-            }
-        }, {
-            name: 'Range',
-            data: ranges,
-            type: 'arearange',
-            lineWidth: 0,
-            linkedTo: ':previous',
-            color: Highcharts.getOptions().colors[0],
-            fillOpacity: 0.3,
-            zIndex: 0
-        }]
-    }));
+    // Highcharts.chart('container', Highcharts.merge(Highcharts.theme, {
+    //
+    //     title: {
+    //         text: 'July temperatures'
+    //     },
+    //
+    //     xAxis: {
+    //         type: 'datetime'
+    //     },
+    //
+    //     yAxis: {
+    //         title: {
+    //             text: null
+    //         }
+    //     },
+    //
+    //     tooltip: {
+    //         crosshairs: true,
+    //         shared: true,
+    //         valueSuffix: '°C'
+    //     },
+    //
+    //     legend: {},
+    //
+    //     series: [{
+    //         name: 'Temperature',
+    //         data: averages,
+    //         zIndex: 1,
+    //         marker: {
+    //             fillColor: 'white',
+    //             lineWidth: 2,
+    //             lineColor: Highcharts.getOptions().colors[0]
+    //         }
+    //     }, {
+    //         name: 'Range',
+    //         data: ranges,
+    //         type: 'arearange',
+    //         lineWidth: 0,
+    //         linkedTo: ':previous',
+    //         color: Highcharts.getOptions().colors[0],
+    //         fillOpacity: 0.3,
+    //         zIndex: 0
+    //     }]
+    // }));
     $.get("/get_instances_summary/", populate_cloud_stats);
     setInterval(function () {
         $.get("/get_instances_summary/", populate_cloud_stats);
@@ -386,8 +386,8 @@ $(document).ready(function () {
 
     $.get("/get_all_time_series/", function (data) {
         var draw = [];
-        draw.append({"CPU": data["cpu_time_series"]});
-        draw_all(draw);
+        draw.push({"name":"CPU", "data": data["CPU"]});
+        draw_multi_chart(draw);
     });
 
 });
