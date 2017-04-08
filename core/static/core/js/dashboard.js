@@ -368,6 +368,7 @@ $(document).ready(function () {
         var draw = [];
         draw.push({"name":"CPU", "data": data["CPU"]});
         draw.push({"name":"Memory", "data": data["MEM"]});
+        draw.push({"name":"Disk Read-Write", "data":data["STORAGE"]});
         draw_multi_chart(draw);
     });
 

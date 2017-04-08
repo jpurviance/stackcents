@@ -229,13 +229,9 @@ function draw_instance_metrics(data, name) {
             text: 'System Resource Utilization for: ' + name
         },
 
-        subtitle: {
-            text: 'Source: thesolarfoundation.com'
-        },
-
         yAxis: {
             title: {
-                text: 'Number of Employees'
+                text: 'Percentage of System Utilization'
             }
         },
         legend: {
@@ -269,8 +265,10 @@ $(document).ready(function () {
 
     $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
         var draw = [];
+        console.log(res);
         draw.push({"name": "CPU", "data": res["CPU"]});
         draw.push({"name": "Memory", "data": res["MEM"]});
+        draw.push({"name":"Disk Read-Write", "data":res["STORAGE"]});
         draw_instance_metrics(draw, res["id"])
     });
 
