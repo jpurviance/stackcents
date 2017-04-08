@@ -7,5 +7,5 @@ from django.views.decorators.csrf import csrf_exempt
 @csrf_exempt
 def echo(request):
     post = request.POST
-    print(post)
+    print(dict(post))
     return HttpResponse(status=200)
