@@ -301,16 +301,16 @@ function draw_multi_chart(data) {
     Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
         title: {
-            text: 'Solar Employment Growth by Sector, 2010-2016'
+            text: "AWS Cluster Resource Consumption"
         },
 
-        subtitle: {
-            text: 'Source: thesolarfoundation.com'
-        },
+        // subtitle: {
+        //     text: 'Live Data Tracking'
+        // },
 
         yAxis: {
             title: {
-                text: 'Number of Employees'
+                text: 'Percentage of System Utilization'
             }
         },
         legend: {
