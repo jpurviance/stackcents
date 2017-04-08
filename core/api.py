@@ -69,3 +69,47 @@ def get_cpu_for_instance(request, instance):
         return JsonResponse(i)
     else:
         return HttpResponse(status=404)
+
+@csrf_exempt
+def get_instance_details(request):
+    instance = request.GET.get('instance', None)
+    print(instance)
+    if instance is None:
+        return HttpResponse(status=404)
+    try:
+        print('trying instance')
+        instance = EC2.objects.get(name=instance)
+        print('woo')
+        data = get_json(instance)
+        processes = []
+        for process in data['processes']:
+            p_data = data['processes'][process]
+            p = {
+                "name": process,
+                "command_line": p_data['cmdline'],
+                "cpu": p_data['cpu_percent'],
+                "memory": p_data['memory_percent'],
+                "pid": p_data['pid'],
+                "threads": p_data['num_threads']
+            }
+            processes.append(p)
+        instance_stats = {'id': data['id'],
+             'cpu': data['cpu']['load_avg']['1_min'] * 100,
+             'memory': (float(data['mem']['used']) / float(data['mem']['total'])) * 100,
+             'network': 100000,
+             'storage': data['storage']['percent'],
+             'metadata': {
+                 "num_cpu": data['meta']['num_cpu']['num_cpu'],
+                 "os":  "???????????!?!?!?!?!?",
+                 "hostname": data['meta']['hostname'],
+                 "type": data['meta']['instance-type'],
+                 "ip": data['meta']['public-ipv4'],
+                 "id": data['id']
+                },
+              "processes": processes
+             }
+        return JsonResponse(instance_stats)
+
+    except EC2.DoesNotExist:
+        return HttpResponse(status=404)
+
