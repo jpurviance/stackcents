@@ -5,7 +5,6 @@ from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from models import EC2
-from stackcents.settings import countmap
 from django.utils import six
 
 import json
@@ -13,6 +12,7 @@ import json
 
 def get_all():
     return EC2.objects.all()
+
 
 def get_json(ec2):
     print(ec2.stats)
@@ -40,16 +40,11 @@ def save_data(request):
 
 # API GETS
 @csrf_exempt
-def count(request, number):
-    countmap[number] += int(number)
-    return JsonResponse({"Count": countmap[number]})
-
-
-@csrf_exempt
 def get_instances(request):
     instances = get_all()
     l = [e.name for e in instances]
     return JsonResponse({"instances": l})
+
 
 @csrf_exempt
 def get_all_cpu(request):
@@ -59,12 +54,14 @@ def get_all_cpu(request):
         l.append(get_cpu(instance))
     return JsonResponse({"all_cpu": l})
 
+
 def get_cpu(instance):
     this_instance = get_all().filter(name=instance).first()
     if this_instance is not None:
         return this_instance['cpu']
     else:
         return None
+
 
 @csrf_exempt
 def get_instances_summary(request):
@@ -79,8 +76,10 @@ def get_instances_summary(request):
              }
         l.append(t)
     return JsonResponse({"total": l})
+
+
 @csrf_exempt
-def get_cpu_for_instance(request,instance):
+def get_cpu_for_instance(request, instance):
     i = get_cpu(instance)
     if i:
         return JsonResponse(i)
