@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from models import EC2
 from django.utils import six
-from utils import EC2, get_json, get_all, get_cpu
+from utils import EC2, get_json, get_all, get_cpu, get_cpu_timeseries, get_all_cpu_timeseries
 import json
 
 
@@ -47,7 +47,6 @@ def get_all_cpu(request):
     return JsonResponse({"all_cpu": l})
 
 
-
 @csrf_exempt
 def get_instances_summary(request):
     all_data = (get_json(ec2) for ec2 in get_all())
@@ -70,6 +69,7 @@ def get_cpu_for_instance(request, instance):
         return JsonResponse(i)
     else:
         return HttpResponse(status=404)
+
 
 @csrf_exempt
 def get_instance_details(request):
@@ -112,3 +112,7 @@ def get_instance_details(request):
     except EC2.DoesNotExist:
         return HttpResponse(status=404)
 
+
+@csrf_exempt
+def get_all_time_series(request):
+    return JsonResponse({"CPU":get_all_cpu_timeseries()})
