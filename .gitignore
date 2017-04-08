@@ -1,6 +1,7 @@
 db.sqlite3
 */*.pyc
 .idea
+*/*/*.pyc
 
 *.0
 a.out
