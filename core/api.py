@@ -47,13 +47,14 @@ def get_all_cpu(request):
     return JsonResponse({"all_cpu": l})
 
 
+
 @csrf_exempt
 def get_instances_summary(request):
     all_data = (get_json(ec2) for ec2 in get_all())
     l = []
     for data in all_data:
         t = {'id': data['id'],
-             'cpu': data['cpu']['load_avg']['1_min'] * 100,
+             'cpu': list(sorted(data['cpu'],key=lambda x: x['id']))[-1]['load_avg_1'],
              'memory': (float(data['mem']['used']) / float(data['mem']['total'])) * 100,
              'network': 100000,
              'storage': data['storage']['percent']
@@ -94,7 +95,7 @@ def get_instance_details(request):
             }
             processes.append(p)
         instance_stats = {'id': data['id'],
-             'cpu': data['cpu']['load_avg']['1_min'] * 100,
+             'cpu': list(sorted(data['cpu'],key=lambda x: x['id']))[-1]['load_avg_1'],
              'memory': (float(data['mem']['used']) / float(data['mem']['total'])) * 100,
              'network': 100000,
              'storage': data['storage']['percent'],
