@@ -78,9 +78,7 @@ def get_instance_details(request):
     if instance is None:
         return HttpResponse(status=404)
     try:
-        print('trying instance')
         instance = EC2.objects.get(name=instance)
-        print('woo')
         data = get_json(instance)
         processes = []
         for process in data['processes']:

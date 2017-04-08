@@ -58,6 +58,6 @@ def get_all_cpu_timeseries():
         lll = []
         for x in l:
             if i < len(x):
-                lll.append(x[i])
-        ll.append( sum(lll) / float(len(lll)))
+                lll.append(float(x[i]))
+        ll.append(sum(lll) / float(len(lll)))
     return ll
