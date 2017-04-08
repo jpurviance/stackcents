@@ -45,8 +45,9 @@ def get_all_mem_timeseries():
 
 def get_cpu_timeseries(instance):
     data = instance
+    ncpu =  data['meta']['num_cpu']['num_cpu']
     all_cpus = list(sorted(data['cpu'], key=lambda x: x['index']))
-    return [float(cpu['load_avg_1']) for cpu in all_cpus]
+    return [max(1.0, (float(cpu['load_avg_1'])*0.75)/ncpu) for cpu in all_cpus]
 
 
 def get_all_cpu_timeseries():
