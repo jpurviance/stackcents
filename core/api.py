@@ -4,6 +4,7 @@ from django.http import HttpResponseNotFound, HttpResponse
 from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
+
 from models import EC2
 from django.utils import six
 from utils import EC2, get_json, get_all, get_cpu
@@ -14,10 +15,13 @@ import json
 def save_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body)
-        print(json_data)
         try:
             id = json_data['id']
-            instance = EC2(name=id, stats=request.body)
+            try:
+                instance = EC2.objects.get(name=id)
+                instance.stats = request.body
+            except EC2.DoesNotExist:
+                instance = EC2(name=id, stats=request.body)
             instance.save()
         except KeyError:
             return HttpResponse(status=400)
