@@ -54,7 +54,7 @@ def get_instances_summary(request):
     for data in all_data:
         t = {'id': data['id'],
              'cpu': data['cpu']['load_avg']['1_min'] * 100,
-             'memory': (data['mem']['used'] / data['mem']['total']) * 100,
+             'memory': (float(data['mem']['used']) / float(data['mem']['total'])) * 100,
              'network': 100000,
              'storage': data['storage']['percent']
              }

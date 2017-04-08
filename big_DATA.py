@@ -107,21 +107,25 @@ json_ = {'cpu': {'load_avg': {'10_min': 0.08, '1_min': 0.72, '5_min': 0.23}},
                    'used': 1845243904}}
 
 def get_obj(id):
+    import random
     json_['id'] = id
+    json_['cpu']['load_avg']['1_min'] = random.randint(0, 10000)
     return json_
 
-for i in range(3):
-    j = get_obj(str(i))
-    #st = json.dumps(j)
-    import os
-    import sys
-    import time
-    import requests
+while True:
+    for i in range(3):
+        j = get_obj(str(i))
+        #st = json.dumps(j)
+        import os
+        import sys
+        import time
+        import requests
 
-    url = "http://localhost:8000/save_data/"
-    data = j
-    print(data)
-    # pprint.pprint(data)
-    headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
-    r = requests.post(url, data=json.dumps(data), headers=headers)
-    print(r.status_code)
+        url = "http://localhost:8000/save_data/"
+        data = j
+        print(data)
+        # pprint.pprint(data)
+        headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
+        r = requests.post(url, data=json.dumps(data), headers=headers)
+        print(r.status_code)
+    time.sleep(1)
