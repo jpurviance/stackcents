@@ -17,5 +17,5 @@ from django.conf.urls import url, include
 from django.contrib import admin
 
 urlpatterns = [
-    url(r'^', include('stackcents.urls')),
+    url(r'^', include('core.urls')),
 ]
