@@ -25,11 +25,28 @@ def get_all():
 def get_json(ec2):
     return json.loads(ec2.stats)
 
+def get_memory_timeseries(instance):
+    data = instance
+    all_mem = list(sorted(data['mem'], key=lambda x: x['index']))
+    return [float(mem['%memused']) for mem in all_mem]
+
+def get_all_mem_timeseries():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [get_memory_timeseries(data) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(sum(lll) / float(len(lll)))
+    return ll
 
 def get_cpu_timeseries(instance):
-    data = get_json(instance)
+    data = instance
     all_cpus = list(sorted(data['cpu'], key=lambda x: x['index']))
-    return [cpu['load_avg_1'] for cpu in all_cpus]
+    return [float(cpu['load_avg_1']) for cpu in all_cpus]
 
 
 def get_all_cpu_timeseries():
@@ -42,5 +59,5 @@ def get_all_cpu_timeseries():
         for x in l:
             if i < len(x):
                 lll.append(x[i])
-        ll.append(sum(lll) / float(len(lll)))
+        ll.append( sum(lll) / float(len(lll)))
     return ll

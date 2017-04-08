@@ -7,7 +7,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from models import EC2
 from django.utils import six
-from utils import EC2, get_json, get_all, get_cpu, get_cpu_timeseries, get_all_cpu_timeseries
+from utils import EC2, get_json, get_all, get_cpu, get_cpu_timeseries, get_all_cpu_timeseries, get_all_mem_timeseries
 import json
 
 
@@ -117,4 +117,4 @@ def get_instance_details(request):
 
 @csrf_exempt
 def get_all_time_series(request):
-    return JsonResponse({"CPU":get_all_cpu_timeseries()})
+    return JsonResponse({"CPU": get_all_cpu_timeseries(), "MEM": get_all_mem_timeseries()})
