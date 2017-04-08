@@ -371,9 +371,10 @@ $(document).ready(function () {
             zIndex: 0
         }]
     }));
+    $.get("/get_instances_summary/", populate_cloud_stats);
     setInterval(function () {
         $.get("/get_instances_summary/", populate_cloud_stats);
-    }, 50000);
+    }, 5000);
 
 
 });
