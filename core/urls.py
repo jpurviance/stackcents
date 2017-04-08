@@ -11,4 +11,5 @@ urlpatterns = [url(r'^save_data/$', api.save_data, name="save_data"),
                url(r'^get_instances_summary/$', api.get_instances_summary, name="get_instances_summary"),
                url(r'^dashboard/$', views.dashboard, name="dashboard"),
                url(r'ec2/$', views.ec2, name="ec2")
+               url(r'^get_instance_details/$', api.get_instance_details, name="get_instance_details")
                ]
