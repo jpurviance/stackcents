@@ -54,7 +54,7 @@ def get_instances_summary(request):
     for data in all_data:
         t = {'id': data['id'],
              'cpu': list(sorted(data['cpu'],key=lambda x: x['index']))[-1]['load_avg_1'],
-             'memory': (float(data['mem']['used']) / float(data['mem']['total'])) * 100,
+             'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
              'network': 100000,
              'storage': data['storage']['percent']
              }
@@ -94,7 +94,7 @@ def get_instance_details(request):
             processes.append(p)
         instance_stats = {'id': data['id'],
              'cpu': list(sorted(data['cpu'],key=lambda x: x['index']))[-1]['load_avg_1'],
-             'memory': (float(data['mem']['used']) / float(data['mem']['total'])) * 100,
+             'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
              'network': 100000,
              'storage': data['storage']['percent'],
              'metadata': {
