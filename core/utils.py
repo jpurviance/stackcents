@@ -23,5 +23,4 @@ def get_all():
 
 
 def get_json(ec2):
-    print(ec2.stats)
     return json.loads(ec2.stats)
