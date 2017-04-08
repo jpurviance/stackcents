@@ -12,9 +12,9 @@ def echo(request):
     return HttpResponse(status=200)
 
 
-map = collections.defaultdict(int)
+countmap = collections.defaultdict(int)
 @csrf_exempt
 def count(request,number):
-    map[number] += 1
-    return JsonResponse({"Count" : map[number]})
+    countmap[number] += 1
+    return JsonResponse({"Count" : countmap[number]})
 
