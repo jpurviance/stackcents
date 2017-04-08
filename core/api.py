@@ -130,9 +130,10 @@ def get_time_series(request):
     if instance is None:
         return HttpResponse(status=404)
     try:
+        name = instance
         instance = EC2.objects.get(name=instance)
         data = get_json(instance)
-        return JsonResponse({"id": instance, "CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
+        return JsonResponse({"id": name, "CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
                              "STORAGE": get_storage_timeseries(data)})
     except EC2.DoesNotExist:
         return HttpResponse(status=400)
