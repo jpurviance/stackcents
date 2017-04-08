@@ -128,6 +128,7 @@ def get_mem_timeseries(data):
 def get_time_series(request):
     instance = request.GET.get('instance', None)
     if instance is None:
+
         return HttpResponse(status=404)
     try:
         instance = EC2.objects.get(name=instance)
@@ -135,4 +136,5 @@ def get_time_series(request):
         return JsonResponse({"CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
                              "STORAGE": get_storage_timeseries(data)})
     except EC2.DoesNotExist:
+
         return HttpResponse(status=400)

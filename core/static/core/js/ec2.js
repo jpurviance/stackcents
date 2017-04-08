@@ -213,27 +213,20 @@ function populate_cloud_stats(json) {
 function ec2_data(json) {
     console.log(json);
     $("#ec2_name").text(json["id"]);
-    $("#hostname").text("Hostname: "+json["metadata"]["hostname"]);
-    $("#os").text("OS: "+json["metadata"]["os"]);
-    $("#type").text("Type: "+json["metadata"]["type"]);
-    $("#cpu").text("Number of CPUs: "+json["metadata"]["num_cpu"]);
-    $("#ip").text("IP: "+json["metadata"]["ip"]);
+    $("#hostname").text("Hostname: " + json["metadata"]["hostname"]);
+    $("#os").text("OS: " + json["metadata"]["os"]);
+    $("#type").text("Type: " + json["metadata"]["type"]);
+    $("#cpu").text("Number of CPUs: " + json["metadata"]["num_cpu"]);
+    $("#ip").text("IP: " + json["metadata"]["ip"]);
 
 }
 
-
-$(document).ready(function () {
-
-
-    $.get("/get_instance_details/?instance="+$("#ec2_id").attr("data-id"), function (res) {
-        ec2_data(res);
-    });
-
+function draw_instance_metrics(data, name) {
     Highcharts.theme = master_theme;
     Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
         title: {
-            text: ''
+            text: 'System Resource Utilization for: ' + name
         },
 
         subtitle: {
@@ -257,28 +250,29 @@ $(document).ready(function () {
             }
         },
 
-        series: [{
-            name: 'Installation',
-            data: [43934, 52503, 57177, 69658, 97031, 119931, 137133, 154175]
-        }, {
-            name: 'Manufacturing',
-            data: [24916, 24064, 29742, 29851, 32490, 30282, 38121, 40434]
-        }, {
-            name: 'Sales & Distribution',
-            data: [11744, 17722, 16005, 19771, 20185, 24377, 32147, 39387]
-        }, {
-            name: 'Project Development',
-            data: [null, null, 7988, 12169, 15112, 22452, 34400, 34227]
-        }, {
-            name: 'Other',
-            data: [12908, 5948, 8105, 11248, 8989, 11816, 18274, 18111]
-        }]
+        series: data
 
     }));
-    $.get("/get_instances_summary/", populate_cloud_stats);
-    setInterval(function () {
-        $.get("/get_instances_summary/", populate_cloud_stats);
-    }, 5000);
+}
+
+
+$(document).ready(function () {
+
+
+    $.get("/get_instance_details/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
+        ec2_data(res);
+    });
+    // $.get("/get_instances_summary/", populate_cloud_stats);
+    // setInterval(function () {
+    //     $.get("/get_instances_summary/", populate_cloud_stats);
+    // }, 5000);
+
+    $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
+        var draw = [];
+        draw.push({"name": "CPU", "data": res["CPU"]});
+        draw.push({"name": "Memory", "data": res["MEM"]});
+        draw_instance_metrics(draw, res["id"])
+    });
 
 });
 
