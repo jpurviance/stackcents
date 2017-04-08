@@ -62,3 +62,4 @@ def get_all_cpu_timeseries():
                 lll.append(float(x[i]))
         ll.append(sum(lll) / float(len(lll)))
     return ll
+

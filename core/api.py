@@ -56,7 +56,7 @@ def get_instances_summary(request):
              'cpu': list(sorted(data['cpu'],key=lambda x: x['index']))[-1]['load_avg_1'],
              'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
              'network': 100000,
-             'storage': data['storage']['percent']
+             'storage': list(sorted(data['storage'], key=lambda x: x['index']))[-1]['percent']
              }
         l.append(t)
     return JsonResponse({"total": l})
@@ -96,7 +96,7 @@ def get_instance_details(request):
              'cpu': list(sorted(data['cpu'],key=lambda x: x['index']))[-1]['load_avg_1'],
              'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
              'network': 100000,
-             'storage': data['storage']['percent'],
+             'storage': list(sorted(data['storage'], key=lambda x: x['index']))[-1]['percent'],
              'metadata': {
                  "num_cpu": data['meta']['num_cpu']['num_cpu'],
                  "os":  "???????????!?!?!?!?!?",
