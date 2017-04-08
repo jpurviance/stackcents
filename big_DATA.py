@@ -126,9 +126,7 @@ while True:
 
         url = "http://localhost:8000/save_data/"
         data = j
-        print(data)
         # pprint.pprint(data)
         headers = {'Content-type': 'application/json', 'Accept': 'text/plain'}
         r = requests.post(url, data=json.dumps(data), headers=headers)
-        print(r.status_code)
-    time.sleep(1)
+    time.sleep(3)
