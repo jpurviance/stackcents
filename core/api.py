@@ -8,4 +8,5 @@ import hashlib
 
 def echo(request):
     post = request.Post
-    JsonResponse(post)
+    print(post)
+    return HttpResponse(status=200)
