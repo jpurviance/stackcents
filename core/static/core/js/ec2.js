@@ -211,12 +211,13 @@ function populate_cloud_stats(json) {
 }
 
 function ec2_data(json) {
-    $("#ec2_name").text("i-87942987243");
-    $("#hostname").text("Hostname: "+"name");
-    $("#os").text("OS: "+"MacOS");
-    $("#type").text("Type: "+"type");
-    $("#cpu").text("Number of CPUs: "+"1000");
-    $("#ip").text("IP: "+"89432978423798234");
+    console.log(json);
+    $("#ec2_name").text(json["id"]);
+    $("#hostname").text("Hostname: "+json["metadata"]["hostname"]);
+    $("#os").text("OS: "+json["metadata"]["os"]);
+    $("#type").text("Type: "+json["metadata"]["type"]);
+    $("#cpu").text("Number of CPUs: "+json["metadata"]["num_cpu"]);
+    $("#ip").text("IP: "+json["metadata"]["ip"]);
 
 }
 
@@ -225,14 +226,14 @@ $(document).ready(function () {
 
 
     $.get("/get_instance_details/?instance="+$("#ec2_id").attr("data-id"), function (res) {
-        console.log(res);
+        ec2_data(res);
     });
 
     Highcharts.theme = master_theme;
     Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
         title: {
-            text: 'Solar Employment Growth by Sector, 2010-2016'
+            text: ''
         },
 
         subtitle: {
@@ -278,8 +279,6 @@ $(document).ready(function () {
     setInterval(function () {
         $.get("/get_instances_summary/", populate_cloud_stats);
     }, 5000);
-
-    ec2_data();
 
 });
 

@@ -11,6 +11,6 @@ def dashboard(request):
 
 
 def ec2(request):
-    ec2_id = request.GET.get("id", "-1")
+    ec2_id = request.GET.get("instance", "-1")
     context = {"id": ec2_id}
     return render(request, "core/ec2.html", context)
