@@ -273,8 +273,8 @@ function populate_cloud_stats(json) {
     var ec2s = json["total"];
     for (var i = 0; i < ec2s.length; i++) {
         var ec2 = ec2s[i];
-        var line = "<tr><td>{0}<td><td>{1}</td><td>{2}</td ><td>{3}</td><td>{4}</td></tr>";
-        $("#ec2_total").append(line.format(ec2["id"], ec2["cpu"], ec2["memory"], ec2["storage"], ec2["network"]));
+        var line = "<tr><td>" + ec2["id"] + "</td><td>" + ec2["cpu"] + "</td><td>" + ec2["memory"] + "</td ><td>" + ec2["storage"] + "</td><td>" + ec2["network"] + "</td></tr>";
+        $("#ec2_total").append(line);
     }
 }
 
