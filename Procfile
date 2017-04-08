@@ -1,0 +1,1 @@
+web: gunicorn stackcents.wsgi --log-file -
