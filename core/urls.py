@@ -3,7 +3,7 @@ from django.conf.urls import url
 from . import views
 from . import api
 
-app_name = 'stackcents'
+app_name = 'core'
 
 
 
