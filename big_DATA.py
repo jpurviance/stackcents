@@ -118,7 +118,7 @@ for i in range(3):
     import time
     import requests
 
-    url = "http://localhost:8000/echo/"
+    url = "http://localhost:8000/save_data/"
     data = j
     print(data)
     # pprint.pprint(data)

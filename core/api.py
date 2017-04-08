@@ -6,25 +6,11 @@ from django.shortcuts import get_object_or_404, render
 from django.views.decorators.csrf import csrf_exempt
 from models import EC2
 from django.utils import six
-
+from utils import EC2, get_json, get_all, get_cpu
 import json
 
 
-def get_all():
-    return EC2.objects.all()
-
-
-def get_json(ec2):
-    print(ec2.stats)
-    return json.loads(ec2.stats)
-
-
 @csrf_exempt
-def echo(request):
-    return save_data(request)
-
-
-# POSTS
 def save_data(request):
     if request.method == 'POST':
         json_data = json.loads(request.body)
@@ -36,6 +22,8 @@ def save_data(request):
         except KeyError:
             return HttpResponse(status=400)
         return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=400)
 
 
 # API GETS
@@ -53,14 +41,6 @@ def get_all_cpu(request):
     for instance in instances:
         l.append(get_cpu(instance))
     return JsonResponse({"all_cpu": l})
-
-
-def get_cpu(instance):
-    this_instance = get_all().filter(name=instance).first()
-    if this_instance is not None:
-        return this_instance['cpu']
-    else:
-        return None
 
 
 @csrf_exempt
