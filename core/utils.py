@@ -29,7 +29,7 @@ def get_json(ec2):
 def get_storage_timeseries(instance):
     data = instance
     all_mem = list(sorted(data['storage'], key=lambda x: x['index']))
-    return [float(mem['percent']) for mem in all_mem]
+    return [float(mem['%util']) for mem in all_mem]
 
 def get_all_storage_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
