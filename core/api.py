@@ -5,7 +5,7 @@ from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
 from utils import EC2, get_json, get_all, get_cpu, get_all_cpu_timeseries, get_all_mem_timeseries, \
-    get_all_storage_timeseries
+    get_all_storage_timeseries, get_cpu_timeseries, get_memory_timeseries, get_storage_timeseries
 
 
 @csrf_exempt
@@ -71,7 +71,6 @@ def get_cpu_for_instance(request, instance):
 @csrf_exempt
 def get_instance_details(request):
     instance = request.GET.get('instance', None)
-    print(instance)
     if instance is None:
         return HttpResponse(status=404)
     try:
@@ -107,10 +106,33 @@ def get_instance_details(request):
         return JsonResponse(instance_stats)
 
     except EC2.DoesNotExist:
-        return HttpResponse(status=404)
+        return HttpResponse(status=400)
 
 
 @csrf_exempt
 def get_all_time_series(request):
     return JsonResponse({"CPU": get_all_cpu_timeseries(), "MEM": get_all_mem_timeseries(),
                          "STORAGE": get_all_storage_timeseries()})
+
+@csrf_exempt
+def get_recommendation(request):
+    return JsonResponse({'recommendation': "You should Download more ram",
+                         'justification': "You are running out of ram"})
+
+
+def get_mem_timeseries(data):
+    pass
+
+
+@csrf_exempt
+def get_time_series(request):
+    instance = request.GET.get('instance', None)
+    if instance is None:
+        return HttpResponse(status=404)
+    try:
+        instance = EC2.objects.get(name=instance)
+        data = get_json(instance)
+        return JsonResponse({"CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
+                             "STORAGE": get_storage_timeseries(data)})
+    except EC2.DoesNotExist:
+        return HttpResponse(status=400)
