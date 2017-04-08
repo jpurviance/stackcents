@@ -12,5 +12,7 @@ urlpatterns = [url(r'^save_data/$', api.save_data, name="save_data"),
                url(r'^dashboard/$', views.dashboard, name="dashboard"),
                url(r'^ec2/$', views.ec2, name="ec2"),
                url(r'^get_instance_details/$', api.get_instance_details, name="get_instance_details"),
-               url(r'^get_all_time_series/$', api.get_all_time_series, name="get_all_time_series")
+               url(r'^get_all_time_series/$', api.get_all_time_series, name="get_all_time_series"),
+               url(r'^get_recommendation/$', api.get_recommendation, name="get_recommendation"),
+               url(r'^get_time_series/$', api.get_time_series, name="get_time_series")
                ]
