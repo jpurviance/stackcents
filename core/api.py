@@ -101,7 +101,11 @@ def get_instance_details(request):
                  "ip": data['meta']['public-ipv4'],
                  "id": data['id']
                 },
-              "processes": processes
+              "processes": processes,
+              "top_25_cpu": processes,
+              "top_25_mem": processes,
+              "bottom_25_cpu": processes,
+              "bottom_25_mem": processes
              }
         return JsonResponse(instance_stats)
 

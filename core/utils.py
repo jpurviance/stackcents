@@ -82,3 +82,10 @@ def get_all_cpu_timeseries():
         ll.append(sum(lll) / float(len(lll)))
     return ll
 
+
+def should_recommend_bigger_instance(instance):
+    ts = get_cpu_timeseries(instance)
+    avg = sum(ts)/ float(len(ts))
+    if avg >= 0.9:
+        return True
+
