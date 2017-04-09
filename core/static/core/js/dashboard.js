@@ -269,7 +269,6 @@ var master_theme = {
     maskColor: 'rgba(255,255,255,0.3)'
 };
 
-var multi_chart;
 
 function populate_cloud_stats(json) {
     $("#ec2_total").empty();
@@ -286,7 +285,7 @@ function populate_cloud_stats(json) {
 
 function draw_multi_chart(data) {
     Highcharts.theme = master_theme;
-    multi_chart = Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
+    Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
         title: {
             text: "AWS Cluster Resource Consumption"
@@ -309,7 +308,22 @@ function draw_multi_chart(data) {
             }
         },
 
-        series: data
+        series: data,
+        chart: {
+            events: {
+                load: function () {
+                    var serites = this.series;
+                    setInterval($.get("/get_all_time_series/", function (data) {
+                        var draw = [];
+                        draw.push({"name": "CPU", "data": data["CPU"]});
+                        draw.push({"name": "Memory", "data": data["MEM"]});
+                        draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
+                        serites[0].setData(draw);
+                        console.log('called');
+                    }), 1000);
+                }
+            }
+        }
 
     }));
 }
@@ -375,14 +389,7 @@ $(document).ready(function () {
         draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
         draw_multi_chart(draw);
     });
-    setInterval($.get("/get_all_time_series/", function (data) {
-        var draw = [];
-        draw.push({"name": "CPU", "data": data["CPU"]});
-        draw.push({"name": "Memory", "data": data["MEM"]});
-        draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
-        console.log(multi_chart);
-        multi_chart.series[0].setData(draw,true);
-    }), 5000);
+
 
 });
 
