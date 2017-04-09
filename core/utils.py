@@ -280,11 +280,11 @@ def should_pay_upfront(instance):
 
 def get_instance_rec(instance):
     r,j = decide_instance_rec(instance)
+    if r is None:
+        r = "DO_NOT_USE"
+        j = "DO_NOT_USE"
     return {"recommendation": r, "justification": j}
 def decide_instance_rec(instance):
-    if should_recommend_bigger_instance(instance):
-        return "You should consider a larger tier instance because your instance spends most of its life at the " \
-               "hardware limitations", "A larger tier node would allow you to give amazon more money "
     if should_add_disk_space(instance):
         return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
                                                                                                     "disk utilization and will soon run out of space."
@@ -292,6 +292,9 @@ def decide_instance_rec(instance):
         return "You should consider making this a reserved instance.", "Since this instance has been running for " \
                                                                        "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
                                                                        "this hack only checks for an uptime of over a day as a proof of concept."
+    if should_recommend_bigger_instance(instance):
+        return "You should consider a larger tier instance because your instance spends most of its life at the " \
+               "hardware limitations", "A larger tier node would allow you to give amazon more money "
     return None, None
 
 
@@ -310,19 +313,19 @@ def get_recommendation_instance(instance, default):
 
 
 def get_top_25_cpu_rec(process):
-    return get_recommendation_process(process, ("default top 25 cpu", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_bottom_25_cpu_rec(process):
-    return get_recommendation_process(process, ("default bottom 25 cpu", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_top_25_mem_rec(process):
-    return get_recommendation_process(process, ("default top 25 memory", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_bottom_25_mem_rec(process):
-    return get_recommendation_process(process, ("default bottom 25 memory", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_top_25_cpu(processes):
