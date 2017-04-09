@@ -25,7 +25,7 @@ SECRET_KEY = 'ay=8#r0z0qhxzq8mtyliktulmf-$*koc^$4th&-=f8!&z2udzf'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [u'stackcents.herokuapp.com', u'127.0.0.1', u'localhost']
+ALLOWED_HOSTS = [u'stackcents.herokuapp.com', u'127.0.0.1', u'localhost',u'www.itdoesntmatter.me',u'itdoesntmatter.me']
 
 # Application definition
 
