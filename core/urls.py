@@ -15,5 +15,6 @@ urlpatterns = [url(r'^save_data/$', api.save_data, name="save_data"),
                url(r'^get_instances/$', api.get_instances, name="get_instances"),
                url(r'^get_all_time_series/$', api.get_all_time_series, name="get_all_time_series"),
                url(r'^get_recommendation/$', api.get_recommendation, name="get_recommendation"),
-               url(r'^get_time_series/$', api.get_time_series, name="get_time_series")
+               url(r'^get_time_series/$', api.get_time_series, name="get_time_series"),
+               url(r'^get_script/$', api.get_script, name="get_script")
                ]

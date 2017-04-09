@@ -147,3 +147,8 @@ def get_time_series(request):
     except EC2.DoesNotExist:
 
         return HttpResponse(status=400)
+
+
+def get_script(request):
+    script = "yum -y install git\ngit clone https://github.com/ewmson/glowing-meme.git\ncd glowing-meme\nyum -y install gcc\npip install -r requirements.txt\npip install --upgrade requests\nnohup python eventloop.py </dev/null > hype.log 2>&1 &"
+    return HttpResponse(script, content_type='text/plain')
