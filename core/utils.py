@@ -246,8 +246,9 @@ def should_lambda(process):
     #mx = max((float(proc['cpu_percent']) for proc in process))
     #md = statistics.median((proc['cpu_percent'] for proc in process))
     #return float(mx) - float(md) >= 70
-    avg = float(sum((float(proc['cpu_percent']) for proc in process))) / max(len([float(proc['cpu_percent']) for proc in process]), 1)
-    return (3 <= avg) and (avg <= 8)
+    #avg = float(sum((float(proc['cpu_percent']) for proc in process))) / max(len([float(proc['cpu_percent']) for proc in process]), 1)
+    #return (3 <= avg) and (avg <= 8)
+    return process[0]['cmdline'][-1] == "lamb.py"
 
 
 def decide_rec(process):
