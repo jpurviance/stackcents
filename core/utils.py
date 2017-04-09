@@ -98,3 +98,19 @@ def should_use_specific_db(instance):
 def should_lambda(instance):
     process_list = instance['processes']
     # now iter
+
+def decide_rec(process):
+    if should_use_specific_db(process):
+        return ("you should consider running this as a specific database instance (insert AWS jargon here)"
+                , "This process is taking up high usage on the system so would be cheaper to run as a standalone "
+                  "database with (AWS service)")
+    if should_lambda(process):
+        return ("you should consider running this function as an AWS lambda function", "This process has occasional "
+                                                                                       "need of the instances "
+                                                                                       "resources but has period of "
+                                                                                       "downtime where there are is "
+                                                                                       "no load. Running this as a "
+                                                                                       "lambda would allow you to only "
+                                                                                       "pay when the function is run.")
+    else:
+        return None, None
