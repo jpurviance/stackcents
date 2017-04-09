@@ -9,7 +9,7 @@ from utils import EC2, get_json, get_all, get_cpu, get_all_cpu_timeseries, get_a
     get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem, get_all_swap_used_timeseries, get_swap_used_timeseries, \
     get_all_storage_timeseries_max, get_all_storage_timeseries_min, get_all_swap_used_timeseries_max, \
     get_all_swap_used_timeseries_min, get_all_mem_timeseries_min, get_all_mem_timeseries_max, \
-    get_all_cpu_timeseries_max, get_all_cpu_timeseries_min
+    get_all_cpu_timeseries_max, get_all_cpu_timeseries_min, decide_instance_rec, get_instance_rec
 
 
 @csrf_exempt
@@ -112,7 +112,8 @@ def get_instance_details(request):
                           "top_25_cpu": get_top_25_cpu(data['processes']),
                           "top_25_mem": get_top_25_mem(data['processes']),
                           "bottom_25_cpu": get_bot_25_cpu(data['processes']),
-                          "bottom_25_mem": get_bottom_25_mem(data['processes'])
+                          "bottom_25_mem": get_bottom_25_mem(data['processes']),
+                          "instance_recs": get_instance_rec(data)
                           }
         return JsonResponse(instance_stats)
 

@@ -202,7 +202,7 @@ function populate_cloud_stats(json) {
     var ec2s = json["total"];
     for (var i = 0; i < ec2s.length; i++) {
         var ec2 = ec2s[i];
-        var line = "<tr><td>" + ec2["id"] + "</td><td>" + ec2["cpu"] + "</td><td>" + ec2["memory"] + "</td ><td>" + ec2["storage"] + "</td><td>" + ec2["network"] + "</td></tr>";
+        var line = "<tr><td>" + ec2["id"] + "</td><td>" + ec2["cpu"] + "</td><td>" + ec2["memory"] + "</td ><td>" + ec2["storage"] + "</td></tr>";
         $("#ec2_total").append(line);
     }
 }
@@ -352,12 +352,16 @@ function draw_instance_metrics(data, name) {
         },
 
         plotOptions: {
-            // series: {
-            //     pointStart: 2010
-            // },
-            marker: {
-                enabled: false
+            series: {
+                pointStart: 2010
+            },
+            line: {
+                marker: {
+                    enabled: false
+                },
+                animation: false
             }
+
         },
 
         series: data
@@ -377,14 +381,18 @@ $(document).ready(function () {
     //     $.get("/get_instances_summary/", populate_cloud_stats);
     // }, 5000);
 
-    $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
-        var draw = [];
-        console.log(res);
-        draw.push({"name": "CPU", "data": res["CPU"]});
-        draw.push({"name": "Memory", "data": res["MEM"]});
-        draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
-        draw_instance_metrics(draw, res["id"])
-    });
+    setInterval(function () {
+        $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
+            var draw = [];
+            console.log(res);
+            draw.push({"name": "CPU", "data": res["CPU"]});
+            draw.push({"name": "Memory", "data": res["MEM"]});
+            draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
+            draw.push({"name": "Swap Usage", "data": res["SWAP"]});
+            draw_instance_metrics(draw, res["id"])
+        });
+    }, 3000);
+
 
 });
 
