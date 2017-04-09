@@ -383,6 +383,7 @@ $(document).ready(function () {
         draw.push({"name": "CPU", "data": res["CPU"]});
         draw.push({"name": "Memory", "data": res["MEM"]});
         draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
+        draw.push({"name": "Swap Usage", "data": res["SWAP"]});
         draw_instance_metrics(draw, res["id"])
     });
 
