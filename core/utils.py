@@ -243,9 +243,11 @@ def should_use_dynamo(process):
 
 
 def should_lambda(process):
-    mx = max((float(proc['cpu_percent']) for proc in process))
-    md = statistics.median((proc['cpu_percent'] for proc in process))
-    return float(mx) - float(md) >= 70
+    #mx = max((float(proc['cpu_percent']) for proc in process))
+    #md = statistics.median((proc['cpu_percent'] for proc in process))
+    #return float(mx) - float(md) >= 70
+    avg = float(sum(numbers)) / max(len(numbers), 1)
+    return 3 <= avg and avg <= 8
 
 
 def decide_rec(process):
