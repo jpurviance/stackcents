@@ -277,11 +277,21 @@ def should_pay_upfront(instance):
     # return float(instance['meta']['uptime']) > 24000000
     return float(instance['meta']['uptime']) > 86400
 
+def should_recommend_special_disk(instance):
+    return float(instance['storage']['%util']) >= 70
+
+def should_add_ram(instance):
+    return float(instance['mem']['%memused']) >= 70
 
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
                "hardware limitations", "A larger tier node would allow you to give amazon more money "
+    if should_recommend_special_disk(instance):
+        return "You should consider changing your instance type to a specialized instance with better read/write capabilities.",
+               "Your instance spends a lot of time reading/writing to disk."
+    if should_add_ram(instance):
+        return "You should consider upgrading your instance to a type with more RAM or try downloading more at http://www.downloadmoreram.com/download.html", "Your instance is using most of it's ram and/or swap."
     if should_add_disk_space(instance):
         return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
                                                                                                     "disk utilization and will soon run out of space."
