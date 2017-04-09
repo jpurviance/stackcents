@@ -65,7 +65,7 @@ def get_cpu_timeseries(instance):
     data = instance
     ncpu = data['meta']['num_cpu']['num_cpu']
     all_cpus = list(sorted(data['cpu'], key=lambda x: x['index']))
-    return [max(1.0, (float(cpu['load_avg_1']) * 0.75) / ncpu) for cpu in all_cpus]
+    return [max(1.0, (float(cpu['load_avg_1']) * 0.75) / ncpu) * 100 for cpu in all_cpus]
 
 
 def get_all_cpu_timeseries():
@@ -95,13 +95,23 @@ def get_mongop(process):
     mx = max([float(proc['cpu_percent']) for proc in process])
     return {'cpu_percent': mx}
 
+def get_postgres(process):
+    if process[0]["name"] != "postgres":
+        return None
+    mx = max([float(proc['cpu_percent']) for proc in process])
+    return {'cpu_percent': mx}
 
-def should_use_specific_db(process):
+def should_use_rds(process):
+    postgres = get_postgres(process)
+    if not postgres:
+        return False
+    return float(postgres['cpu_percent']) >= 70
+
+def should_use_dynamo(process):
     mongo = get_mongop(process)
     if not mongo:
         return False
     return float(mongo['cpu_percent']) >= 70
-
 
 def should_lambda(process):
     mx = max((float(proc['cpu_percent']) for proc in process))
@@ -110,10 +120,14 @@ def should_lambda(process):
 
 
 def decide_rec(process):
-    if should_use_specific_db(process):
-        return ("you should consider running this as a specific database instance (insert AWS jargon here)"
-                , "This process is taking up high usage on the system so would be cheaper to run as a standalone "
-                  "database with (AWS service)")
+    if should_use_rds(process):
+        return ("You should consider running this database in a Relational Database (RDS) instead."
+                , "This process is taking up high usage on the system and would be cheaper to run as a standalone "
+                  "database instance")
+    if should_use_dynamo(process):
+        return ("You should consider running this database in DynamoDB instead."
+                , "This process is taking up high usage on the system and would be cheaper to run as a standalone "
+                  "database instance")
     if should_lambda(process):
         return ("you should consider running this function as an AWS lambda function", "This process has occasional "
                                                                                        "need of the instances "
@@ -128,27 +142,21 @@ def decide_rec(process):
 def should_add_disk_space(instance):
     return float(instance['disk']['percent']) >= 90
 
-def decide_disk_space(instance):
-    if should_add_disk_space(instance):
-        return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
-               "disk utilization and will soon run out of space."
-    return None, None
-
 def should_pay_upfront(instance):
     #return float(instance['meta']['uptime']) > 24000000
     return float(instance['meta']['uptime']) > 86400
-
-def decide_instance_upfront(instance):
-    if should_pay_upfront(instance):
-        return "You should consider making this a reserved instance.", "Since this instance has been running for " \
-               "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
-               "this hack only checks for an uptime of over a day as a proof of concept."
-    return None, None
 
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
                "hardware limitations", "A larger tier node would allow you to give amazon more money "
+    if should_add_disk_space(instance):
+        return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
+               "disk utilization and will soon run out of space."
+    if should_pay_upfront(instance):
+        return "You should consider making this a reserved instance.", "Since this instance has been running for " \
+               "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
+               "this hack only checks for an uptime of over a day as a proof of concept."
     return None, None
 
 
