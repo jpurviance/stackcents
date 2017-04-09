@@ -150,5 +150,15 @@ def get_time_series(request):
 
 
 def get_script(request):
-    script = "yum -y install git\ngit clone https://github.com/ewmson/glowing-meme.git\ncd glowing-meme\nyum -y install gcc\npip install -r requirements.txt\npip install --upgrade requests\nnohup python eventloop.py </dev/null > hype.log 2>&1 &"
+    script ="""
+    yum -y install git\n
+    git clone https://github.com/ewmson/glowing-meme.git\n
+    cd glowing-meme\n
+    yum -y install gcc\n
+    yum install sysstat\n
+    systemctl enable sysstat\n
+    pip install -r requirements.txt\n
+    pip install --upgrade requests\n
+    nohup python eventloop.py </dev/null > hype.log 2>&1 &\n
+    """
     return HttpResponse(script, content_type='text/plain')
