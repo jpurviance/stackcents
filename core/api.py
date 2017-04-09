@@ -78,15 +78,16 @@ def get_instance_details(request):
         data = get_json(instance)
         processes = []
         for process in data['processes']:
-            p_data = data['processes'][process]
+            name = process[0]['name']
+            p_data = list(sorted(process,key=lambda x: x['index']))[-1]
             p = {
-                "name": process,
+                "name": name,
                 "command_line": p_data['cmdline'],
                 "cpu": p_data['cpu_percent'],
                 "memory": p_data['memory_percent'],
                 "pid": p_data['pid'],
                 "threads": p_data['num_threads'],
-                'recommendation': "You should Download more ram",
+                'recommendation': "You should download more ram",
                 'justification': "You are running out of ram"
             }
             processes.append(p)
