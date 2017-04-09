@@ -1,4 +1,5 @@
 import json
+import datetime
 import statistics
 
 from models import EC2
@@ -124,6 +125,25 @@ def decide_rec(process):
     else:
         return None, None
 
+def should_add_disk_space(instance):
+    return float(instance['disk']['percent']) >= 90
+
+def decide_disk_space(instance):
+    if should_add_disk_space(instance):
+        return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
+               "disk utilization and will soon run out of space."
+    return None, None
+
+def should_pay_upfront(instance):
+    #return float(instance['meta']['uptime']) > 24000000
+    return float(instance['meta']['uptime']) > 86400
+
+def decide_instance_upfront(instance):
+    if should_pay_upfront(instance):
+        return "You should consider making this a reserved instance.", "Since this instance has been running for " \
+               "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
+               "this hack only checks for an uptime of over a day as a proof of concept."
+    return None, None
 
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
@@ -177,8 +197,64 @@ def get_top_25_cpu(processes):
         p = {
             "name": name,
             "command_line": p_data['cmdline'],
-            "cpu": p_data['cpu_percent'],
+            "cpu": processes_cpu[0][1],
             "memory": p_data['memory_percent'],
+            "pid": p_data['pid'],
+            "threads": p_data['num_threads'],
+            'recommendation': result["recommendation"],
+            'justification': result["justification"]
+        }
+        plist.append(p)
+    return plist
+
+def get_top_25_mem(processes):
+    processes_mem = list(
+        sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
+               key=lambda x: x[1], reverse=True))
+    fourth = max(len(processes_mem) // 4, 1)
+    #print(fourth)
+    top_25 = processes_mem[:fourth]
+    print('top')
+    print(map(lambda x: x[1], processes_mem))
+    just_proc = map(lambda x: x[0], top_25)
+    plist = []
+    for proc in just_proc:
+        p_data = list(sorted(proc, key=lambda x: x['index']))[-1]
+        name = proc[0]['name']
+        result = get_top_25_mem_rec(proc)
+        p = {
+            "name": name,
+            "command_line": p_data['cmdline'],
+            "cpu": p_data['cpu_percent'],
+            "memory": processes_mem[0][1],
+            "pid": p_data['pid'],
+            "threads": p_data['num_threads'],
+            'recommendation': result["recommendation"],
+            'justification': result["justification"]
+        }
+        plist.append(p)
+    return plist
+
+def get_bottom_25_mem(processes):
+    processes_mem = list(
+        sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
+               key=lambda x: x[1]))
+    fourth = max(len(processes_mem) // 4, 1)
+    #print(fourth)
+    print('bot')
+    top_25 = processes_mem[:fourth]
+    print(map(lambda x: x[1], processes_mem))
+    just_proc = map(lambda x: x[0], top_25)
+    plist = []
+    for proc in just_proc:
+        p_data = list(sorted(proc, key=lambda x: x['index']))[-1]
+        name = proc[0]['name']
+        result = get_bottom_25_mem_rec(proc)
+        p = {
+            "name": name,
+            "command_line": p_data['cmdline'],
+            "cpu": p_data['cpu_percent'],
+            "memory": processes_mem[0][1],
             "pid": p_data['pid'],
             "threads": p_data['num_threads'],
             'recommendation': result["recommendation"],
@@ -203,7 +279,7 @@ def get_bot_25_cpu(processes):
         p = {
             "name": name,
             "command_line": p_data['cmdline'],
-            "cpu": p_data['cpu_percent'],
+            "cpu": processes_cpu[0][1],
             "memory": p_data['memory_percent'],
             "pid": p_data['pid'],
             "threads": p_data['num_threads'],

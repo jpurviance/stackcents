@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from utils import EC2, get_json, get_all, get_cpu, get_all_cpu_timeseries, get_all_mem_timeseries, \
     get_all_storage_timeseries, get_cpu_timeseries, get_memory_timeseries, get_storage_timeseries, get_top_25_cpu, \
-    get_bot_25_cpu
+    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem
 
 
 @csrf_exempt
@@ -110,9 +110,9 @@ def get_instance_details(request):
                 },
               "processes": processes,
               "top_25_cpu": get_top_25_cpu(data['processes']),
-              "top_25_mem": processes,
+              "top_25_mem": get_top_25_mem(data['processes']),
               "bottom_25_cpu": get_bot_25_cpu(data['processes']),
-              "bottom_25_mem": processes
+              "bottom_25_mem": get_bottom_25_mem(data['processes'])
              }
         return JsonResponse(instance_stats)
 
