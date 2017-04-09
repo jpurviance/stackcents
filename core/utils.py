@@ -96,10 +96,10 @@ def should_use_specific_db(instance):
         return False
     return float(mongo['cpu_percent']) >= 70
 
-def should_lambda(process:
+def should_lambda(process):
     mx = max((proc['cpu_percent'] for proc in process))
     md = statistics.median((proc['cpu_percent'] for proc in process))
-    return float(mx) - float(md) >= 70:
+    return float(mx) - float(md) >= 70
 
 def decide_rec(process):
     if should_use_specific_db(process):
