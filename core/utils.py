@@ -202,7 +202,7 @@ def get_top_25_mem(processes):
     #print(fourth)
     top_25 = processes_mem[:fourth]
     print('top')
-    print(processes_mem)
+    print(map(processes_mem, lambda x: x[1]))
     just_proc = map(lambda x: x[0], top_25)
     plist = []
     for proc in just_proc:
@@ -230,7 +230,7 @@ def get_bottom_25_mem(processes):
     #print(fourth)
     print('bot')
     top_25 = processes_mem[:fourth]
-    print(processes_mem)
+    print(map(processes_mem, lambda x : x[1]))
     just_proc = map(lambda x: x[0], top_25)
     plist = []
     for proc in just_proc:
