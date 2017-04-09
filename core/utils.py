@@ -102,10 +102,10 @@ def get_postgres(process):
     return {'cpu_percent': mx}
 
 def should_use_rds(process):
-   postgres = get_postgres(process)
+    postgres = get_postgres(process)
     if not postgres:
         return False
-    return float(postgres['cpu_percent']) >= 70 
+    return float(postgres['cpu_percent']) >= 70
 
 def should_use_dynamo(process):
     mongo = get_mongop(process)
@@ -150,7 +150,7 @@ def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
                "hardware limitations", "A larger tier node would allow you to give amazon more money "
-    if should add disk_space(instance):
+    if should_add_disk_space(instance):
         return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
                "disk utilization and will soon run out of space."
     if should_pay_upfront(instance):
