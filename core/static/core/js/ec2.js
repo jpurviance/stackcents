@@ -358,7 +358,8 @@ function draw_instance_metrics(data, name) {
             line: {
                 marker: {
                     enabled: false
-                }
+                },
+                animation: false
             }
 
         },
