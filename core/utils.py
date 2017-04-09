@@ -272,6 +272,7 @@ def decide_rec(process):
 
 
 def should_add_disk_space(instance):
+    print(instance['disk'])
     return float(instance['disk']['percent']) >= 90
 
 
