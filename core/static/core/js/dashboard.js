@@ -70,7 +70,6 @@ var ranges = [
     ];
 
 
-
 var master_theme = {
     colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
         '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
@@ -275,8 +274,11 @@ function populate_cloud_stats(json) {
     var ec2s = json["total"];
     for (var i = 0; i < ec2s.length; i++) {
         var ec2 = ec2s[i];
-        var line = "<tr><td>" + ec2["id"] + "</td><td>" + ec2["cpu"] + "</td><td>" + ec2["memory"] + "</td ><td>" + ec2["storage"] + "</td><td>" + ec2["network"] + "</td></tr>";
+        var line = "<tr id=" + ec2["id"] + "><td>" + ec2["id"] + "</td><td>" + ec2["cpu"] + "</td><td>" + ec2["memory"] + "</td ><td>" + ec2["storage"] + "</td><td>" + ec2["network"] + "</td></tr>";
         $("#ec2_total").append(line);
+        $("#" + ec2["id"]).click(function (event) {
+            window.location.href = "/ec2/?instance=" + $(this)[0]["id"];
+        });
     }
 }
 
@@ -366,9 +368,9 @@ $(document).ready(function () {
 
     $.get("/get_all_time_series/", function (data) {
         var draw = [];
-        draw.push({"name":"CPU", "data": data["CPU"]});
-        draw.push({"name":"Memory", "data": data["MEM"]});
-        draw.push({"name":"Disk Read-Write", "data":data["STORAGE"]});
+        draw.push({"name": "CPU", "data": data["CPU"]});
+        draw.push({"name": "Memory", "data": data["MEM"]});
+        draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
         draw_multi_chart(draw);
     });
 
