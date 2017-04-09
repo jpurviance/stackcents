@@ -78,7 +78,7 @@ def get_instance_details(request):
         data = get_json(instance)
         processes = []
         for process in data['processes']:
-            name = process['name'][0]
+            name = process[0]['name']
             p_data = list(sorted(process,key=lambda x: x['index']))[-1]
             p = {
                 "name": name,
