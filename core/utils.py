@@ -292,9 +292,6 @@ def get_instance_rec(instance):
         j = "DO_NOT_USE"
     return {"recommendation": r, "justification": j}
 def decide_instance_rec(instance):
-    if should_recommend_bigger_instance(instance):
-        return "You should consider a larger tier instance because your instance spends most of its life at the " \
-               "hardware limitations", "A larger tier node would allow you to give amazon more money "
     if should_recommend_special_disk(instance):
         return "You should consider changing your instance type to a specialized instance with better read/write capabilities.",\
                "Your instance spends a lot of time reading/writing to disk."
