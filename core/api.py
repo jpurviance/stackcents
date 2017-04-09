@@ -6,7 +6,10 @@ from django.views.decorators.csrf import csrf_exempt
 
 from utils import EC2, get_json, get_all, get_cpu, get_all_cpu_timeseries, get_all_mem_timeseries, \
     get_all_storage_timeseries, get_cpu_timeseries, get_memory_timeseries, get_storage_timeseries, get_top_25_cpu, \
-    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem
+    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem, get_all_swap_used_timeseries, get_swap_used_timeseries, \
+    get_all_storage_timeseries_max, get_all_storage_timeseries_min, get_all_swap_used_timeseries_max, \
+    get_all_swap_used_timeseries_min, get_all_mem_timeseries_min, get_all_mem_timeseries_max, \
+    get_all_cpu_timeseries_max, get_all_cpu_timeseries_min
 
 
 @csrf_exempt
@@ -119,8 +122,19 @@ def get_instance_details(request):
 
 @csrf_exempt
 def get_all_time_series(request):
-    return JsonResponse({"CPU": get_all_cpu_timeseries(), "MEM": get_all_mem_timeseries(),
-                         "STORAGE": get_all_storage_timeseries()})
+    return JsonResponse({"CPU": get_all_cpu_timeseries(),
+                         "MEM": get_all_mem_timeseries(),
+                         "STORAGE": get_all_storage_timeseries(),
+                         "SWAP": get_all_swap_used_timeseries(),
+                         "MAX_SWAP": get_all_swap_used_timeseries_max(),
+                         "MIN_SWAP": get_all_swap_used_timeseries_min(),
+                         "MAX_STORAGE": get_all_storage_timeseries_max(),
+                         "MIN_STORAGE": get_all_storage_timeseries_min(),
+                         "MAX_MEM": get_all_mem_timeseries_max(),
+                         "MIN_MEM": get_all_mem_timeseries_min(),
+                         "MAX_CPU": get_all_cpu_timeseries_max(),
+                         "MIN_CPU": get_all_cpu_timeseries_min()
+                         })
 
 
 @csrf_exempt
@@ -138,8 +152,11 @@ def get_time_series(request):
         name = instance
         instance = EC2.objects.get(name=instance)
         data = get_json(instance)
-        return JsonResponse({"id": name, "CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
-                             "STORAGE": get_storage_timeseries(data)})
+        return JsonResponse({"id": name,
+                             "CPU": get_cpu_timeseries(data),
+                             "MEM": get_memory_timeseries(data),
+                             "STORAGE": get_storage_timeseries(data),
+                             "SWAP": get_swap_used_timeseries(data)})
     except EC2.DoesNotExist:
 
         return HttpResponse(status=400)

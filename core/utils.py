@@ -21,15 +21,15 @@ def get_json(ec2):
     return json.loads(ec2.stats)
 
 
-def get_storage_timeseries(instance):
+def get_swap_used_timeseries(instance):
     data = instance
-    all_mem = list(sorted(data['storage'], key=lambda x: x['index']))
-    return [float(mem['%util']) for mem in all_mem]
+    all_mem = list(sorted(data['swap'], key=lambda x: x['index']))
+    return [float(mem['%swpused']) for mem in all_mem]
 
 
-def get_all_storage_timeseries():
+def get_all_swap_used_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
-    l = [get_storage_timeseries(data) for data in all_data]
+    l = [list(reversed(get_swap_used_timeseries(data))) for data in all_data]
     max_idx = max(len(x) - 1 for x in l)
     ll = []
     for i in range(max_idx):
@@ -38,8 +38,79 @@ def get_all_storage_timeseries():
             if i < len(x):
                 lll.append(x[i])
         ll.append(sum(lll) / float(len(lll)))
-    return ll
+    return list(reversed(ll))
 
+def get_all_swap_used_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_swap_used_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(max(lll))
+    return list(reversed(ll))
+
+def get_all_swap_used_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_swap_used_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(min(lll))
+    return list(reversed(ll))
+
+
+def get_storage_timeseries(instance):
+    data = instance
+    all_mem = list(sorted(data['storage'], key=lambda x: x['index']))
+    return [float(mem['%util']) for mem in all_mem]
+
+
+def get_all_storage_timeseries():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_storage_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(sum(lll) / float(len(lll)))
+    return list(reversed(ll))
+
+def get_all_storage_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_storage_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(max(lll))
+    return list(reversed(ll))
+
+def get_all_storage_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_storage_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(min(lll))
+    return list(reversed(ll))
 
 def get_memory_timeseries(instance):
     data = instance
@@ -49,7 +120,7 @@ def get_memory_timeseries(instance):
 
 def get_all_mem_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
-    l = [get_memory_timeseries(data) for data in all_data]
+    l = [list(reversed(get_memory_timeseries(data))) for data in all_data]
     max_idx = max(len(x) - 1 for x in l)
     ll = []
     for i in range(max_idx):
@@ -58,19 +129,45 @@ def get_all_mem_timeseries():
             if i < len(x):
                 lll.append(x[i])
         ll.append(sum(lll) / float(len(lll)))
-    return ll
+    return list(reversed(ll))
+
+def get_all_mem_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_memory_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(max(lll))
+    return list(reversed(ll))
+
+def get_all_mem_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_memory_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(min(lll))
+    return list(reversed(ll))
 
 
 def get_cpu_timeseries(instance):
     data = instance
     ncpu = data['meta']['num_cpu']['num_cpu']
     all_cpus = list(sorted(data['cpu'], key=lambda x: x['index']))
-    return [max(1.0, (float(cpu['load_avg_1']) * 0.75) / ncpu) for cpu in all_cpus]
+    return [min(1.0, (float(cpu['load_avg_1']) * 0.75) / ncpu) * 100 for cpu in all_cpus]
 
 
 def get_all_cpu_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
-    l = [get_cpu_timeseries(data) for data in all_data]
+    l = [list(reversed(get_cpu_timeseries(data))) for data in all_data]
     max_idx = max(len(x) - 1 for x in l)
     ll = []
     for i in range(max_idx):
@@ -79,7 +176,35 @@ def get_all_cpu_timeseries():
             if i < len(x):
                 lll.append(float(x[i]))
         ll.append(sum(lll) / float(len(lll)))
-    return ll
+    return list(reversed(ll))
+
+
+def get_all_cpu_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_cpu_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(float(x[i]))
+        ll.append(min(lll))
+    return list(reversed(ll))
+
+
+def get_all_cpu_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_cpu_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(float(x[i]))
+        ll.append(max(lll))
+    return list(reversed(ll))
 
 
 def should_recommend_bigger_instance(instance):
@@ -95,24 +220,27 @@ def get_mongop(process):
     mx = max([float(proc['cpu_percent']) for proc in process])
     return {'cpu_percent': mx}
 
+
 def get_postgres(process):
     if process[0]["name"] != "postgres":
         return None
     mx = max([float(proc['cpu_percent']) for proc in process])
     return {'cpu_percent': mx}
 
+
 def should_use_rds(process):
-   postgres = get_postgres(process)
+    postgres = get_postgres(process)
     if not postgres:
         return False
-    #return float(postgres['cpu_percent']) >= 70 
     return True
+    #return float(postgres['cpu_percent']) >= 70
 
 def should_use_dynamo(process):
     mongo = get_mongop(process)
     if not mongo:
         return False
     return float(mongo['cpu_percent']) >= 70
+
 
 def should_lambda(process):
     mx = max((float(proc['cpu_percent']) for proc in process))
@@ -140,24 +268,27 @@ def decide_rec(process):
     else:
         return None, None
 
+
 def should_add_disk_space(instance):
     return float(instance['disk']['percent']) >= 90
 
+
 def should_pay_upfront(instance):
-    #return float(instance['meta']['uptime']) > 24000000
+    # return float(instance['meta']['uptime']) > 24000000
     return float(instance['meta']['uptime']) > 86400
+
 
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
                "hardware limitations", "A larger tier node would allow you to give amazon more money "
-    if should add disk_space(instance):
+    if should_add_disk_space(instance):
         return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
-               "disk utilization and will soon run out of space."
+                                                                                                    "disk utilization and will soon run out of space."
     if should_pay_upfront(instance):
         return "You should consider making this a reserved instance.", "Since this instance has been running for " \
-               "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
-               "this hack only checks for an uptime of over a day as a proof of concept."
+                                                                       "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
+                                                                       "this hack only checks for an uptime of over a day as a proof of concept."
     return None, None
 
 
@@ -216,15 +347,15 @@ def get_top_25_cpu(processes):
         plist.append(p)
     return plist
 
+
 def get_top_25_mem(processes):
     processes_mem = list(
-        sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
-               key=lambda x: x[1], reverse=True))
+        sorted(
+            [(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
+            key=lambda x: x[1], reverse=True))
     fourth = max(len(processes_mem) // 4, 1)
-    #print(fourth)
+    # print(fourth)
     top_25 = processes_mem[:fourth]
-    print('top')
-    print(map(lambda x: x[1], processes_mem))
     just_proc = map(lambda x: x[0], top_25)
     plist = []
     for proc in just_proc:
@@ -244,15 +375,14 @@ def get_top_25_mem(processes):
         plist.append(p)
     return plist
 
+
 def get_bottom_25_mem(processes):
     processes_mem = list(
-        sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
-               key=lambda x: x[1]))
+        sorted(
+            [(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
+            key=lambda x: x[1]))
     fourth = max(len(processes_mem) // 4, 1)
-    #print(fourth)
-    print('bot')
     top_25 = processes_mem[:fourth]
-    print(map(lambda x: x[1], processes_mem))
     just_proc = map(lambda x: x[0], top_25)
     plist = []
     for proc in just_proc:
