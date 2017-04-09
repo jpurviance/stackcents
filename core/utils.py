@@ -60,6 +60,19 @@ def get_all_storage_timeseries():
         ll.append(sum(lll) / float(len(lll)))
     return list(reversed(ll))
 
+def get_all_storage_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_storage_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(max(lll))
+    return list(reversed(ll))
+
 
 def get_memory_timeseries(instance):
     data = instance
