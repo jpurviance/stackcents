@@ -329,7 +329,14 @@ function ec2_data(json) {
         $("#bot_mem").append(place);
     }
 
-
+    if (json["instance_recs"]["justification"] != "DO_NOT_USE") {
+        var build = '<div class="panel-heading" style="background-color:#222222"><h3 style="text-align:center;color:white">Cost Optimization</h3>' +
+            '</div><div class="panel-body">' +
+            '<div class="col-xs-6"><h4>Optimization:</h4>'+json["instance_recs"]["recommendation"]+'</div>' + '<div class="col-xs-6"><h4>Configuration Limitations: </h4>'+json["instance_recs"]["justification"]+'</div>'+
+            '</div>';
+        $("#recs").append(build);
+        console.log(build);
+    }
 }
 
 function draw_instance_metrics(data, name) {
@@ -376,10 +383,6 @@ $(document).ready(function () {
     $.get("/get_instance_details/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
         ec2_data(res);
     });
-    // $.get("/get_instances_summary/", populate_cloud_stats);
-    // setInterval(function () {
-    //     $.get("/get_instances_summary/", populate_cloud_stats);
-    // }, 5000);
 
     setInterval(function () {
         $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
