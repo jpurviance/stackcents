@@ -192,6 +192,7 @@ def get_top_25_mem(processes):
         sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
                key=lambda x: x[1]))
     fourth = max(len(processes_mem) // 4, 1)
+    print(fourth)
     top_25 = processes_mem[:fourth]
     just_proc = map(lambda x: x[0], top_25)
     plist = []
@@ -217,6 +218,7 @@ def get_bottom_25_mem(processes):
         sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
                key=lambda x: x[1], reverse=True))
     fourth = max(len(processes_mem) // 4, 1)
+    print(fourth)
     top_25 = processes_mem[:fourth]
     just_proc = map(lambda x: x[0], top_25)
     plist = []
