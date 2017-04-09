@@ -280,6 +280,9 @@ def should_pay_upfront(instance):
 
 def get_instance_rec(instance):
     r,j = decide_instance_rec(instance)
+    if r is None:
+        r = "DO_NOT_USE"
+        j = "DO_NOT_USE"
     return {"recommendation": r, "justification": j}
 def decide_instance_rec(instance):
     if should_add_disk_space(instance):
@@ -310,19 +313,19 @@ def get_recommendation_instance(instance, default):
 
 
 def get_top_25_cpu_rec(process):
-    return get_recommendation_process(process, ("default top 25 cpu", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_bottom_25_cpu_rec(process):
-    return get_recommendation_process(process, ("default bottom 25 cpu", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_top_25_mem_rec(process):
-    return get_recommendation_process(process, ("default top 25 memory", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_bottom_25_mem_rec(process):
-    return get_recommendation_process(process, ("default bottom 25 memory", "this is a default"))
+    return get_recommendation_process(process, ("DO_NOT_USE", "DO_NOT_USE"))
 
 
 def get_top_25_cpu(processes):
