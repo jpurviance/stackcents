@@ -246,8 +246,8 @@ def should_lambda(process):
     #mx = max((float(proc['cpu_percent']) for proc in process))
     #md = statistics.median((proc['cpu_percent'] for proc in process))
     #return float(mx) - float(md) >= 70
-    avg = float(sum(numbers)) / max(len(numbers), 1)
-    return 3 <= avg and avg <= 8
+    avg = float(sum((float(proc['cpu_percent']) for proc in process))) / max(len([float(proc['cpu_percent']) for proc in process]), 1)
+    return (3 <= avg) and (avg <= 8)
 
 
 def decide_rec(process):
@@ -296,7 +296,7 @@ def decide_instance_rec(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
                "hardware limitations", "A larger tier node would allow you to give amazon more money "
     if should_recommend_special_disk(instance):
-        return "You should consider changing your instance type to a specialized instance with better read/write capabilities.",
+        return "You should consider changing your instance type to a specialized instance with better read/write capabilities.",\
                "Your instance spends a lot of time reading/writing to disk."
     if should_add_ram(instance):
         return "You should consider upgrading your instance to a type with more RAM or try downloading more at http://www.downloadmoreram.com/download.html", "Your instance is using most of it's ram and/or swap."
