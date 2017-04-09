@@ -1,13 +1,6 @@
-import collections
-from django.http import JsonResponse
-from django.http import HttpResponseNotFound, HttpResponse
-from django.urls import reverse
-from django.shortcuts import get_object_or_404, render
-from django.views.decorators.csrf import csrf_exempt
-from models import EC2
-from django.utils import six
-
 import json
+
+from models import EC2
 
 
 def get_cpu(instance):
@@ -102,3 +95,6 @@ def should_use_specific_db(instance):
         return False
     return float(mongo['cpu_percent']) >= 70
 
+def should_lambda(instance):
+    process_list = instance['processes']
+    # now iter
