@@ -29,7 +29,7 @@ def get_storage_timeseries(instance):
 
 def get_all_storage_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
-    l = [get_storage_timeseries(data) for data in all_data]
+    l = [list(reversed(get_storage_timeseries(data))) for data in all_data]
     max_idx = max(len(x) - 1 for x in l)
     ll = []
     for i in range(max_idx):
@@ -38,7 +38,7 @@ def get_all_storage_timeseries():
             if i < len(x):
                 lll.append(x[i])
         ll.append(sum(lll) / float(len(lll)))
-    return ll
+    return list(reversed(ll))
 
 
 def get_memory_timeseries(instance):
@@ -49,7 +49,7 @@ def get_memory_timeseries(instance):
 
 def get_all_mem_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
-    l = [get_memory_timeseries(data) for data in all_data]
+    l = [list(reversed(get_memory_timeseries(data))) for data in all_data]
     max_idx = max(len(x) - 1 for x in l)
     ll = []
     for i in range(max_idx):
@@ -58,7 +58,7 @@ def get_all_mem_timeseries():
             if i < len(x):
                 lll.append(x[i])
         ll.append(sum(lll) / float(len(lll)))
-    return ll
+    return list(reversed(ll))
 
 
 def get_cpu_timeseries(instance):
@@ -70,7 +70,7 @@ def get_cpu_timeseries(instance):
 
 def get_all_cpu_timeseries():
     all_data = (get_json(ec2) for ec2 in get_all())
-    l = [get_cpu_timeseries(data) for data in all_data]
+    l = [list(reversed(get_cpu_timeseries(data))) for data in all_data]
     max_idx = max(len(x) - 1 for x in l)
     ll = []
     for i in range(max_idx):
@@ -79,7 +79,7 @@ def get_all_cpu_timeseries():
             if i < len(x):
                 lll.append(float(x[i]))
         ll.append(sum(lll) / float(len(lll)))
-    return ll
+    return list(reversed(ll))
 
 
 def should_recommend_bigger_instance(instance):
