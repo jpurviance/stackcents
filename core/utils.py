@@ -40,6 +40,32 @@ def get_all_swap_used_timeseries():
         ll.append(sum(lll) / float(len(lll)))
     return list(reversed(ll))
 
+def get_all_swap_used_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_swap_used_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(max(lll))
+    return list(reversed(ll))
+
+def get_all_swap_used_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_swap_used_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(min(lll))
+    return list(reversed(ll))
+
 
 def get_storage_timeseries(instance):
     data = instance
@@ -73,6 +99,18 @@ def get_all_storage_timeseries_max():
         ll.append(max(lll))
     return list(reversed(ll))
 
+def get_all_storage_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_storage_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(min(lll))
+    return list(reversed(ll))
 
 def get_memory_timeseries(instance):
     data = instance
@@ -91,6 +129,32 @@ def get_all_mem_timeseries():
             if i < len(x):
                 lll.append(x[i])
         ll.append(sum(lll) / float(len(lll)))
+    return list(reversed(ll))
+
+def get_all_mem_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_memory_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(max(lll))
+    return list(reversed(ll))
+
+def get_all_mem_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_memory_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(x[i])
+        ll.append(min(lll))
     return list(reversed(ll))
 
 
@@ -112,6 +176,34 @@ def get_all_cpu_timeseries():
             if i < len(x):
                 lll.append(float(x[i]))
         ll.append(sum(lll) / float(len(lll)))
+    return list(reversed(ll))
+
+
+def get_all_cpu_timeseries_min():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_cpu_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(float(x[i]))
+        ll.append(min(lll))
+    return list(reversed(ll))
+
+
+def get_all_cpu_timeseries_max():
+    all_data = (get_json(ec2) for ec2 in get_all())
+    l = [list(reversed(get_cpu_timeseries(data))) for data in all_data]
+    max_idx = max(len(x) - 1 for x in l)
+    ll = []
+    for i in range(max_idx):
+        lll = []
+        for x in l:
+            if i < len(x):
+                lll.append(float(x[i]))
+        ll.append(max(lll))
     return list(reversed(ll))
 
 
