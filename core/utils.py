@@ -82,3 +82,23 @@ def get_all_cpu_timeseries():
         ll.append(sum(lll) / float(len(lll)))
     return ll
 
+
+def should_recommend_bigger_instance(instance):
+    ts = get_cpu_timeseries(instance)
+    avg = sum(ts)/ float(len(ts))
+    if avg >= 0.9:
+        return True
+
+
+def get_mongop(instance):
+    if "mongod" in instance['processes']:
+        return instance['processes']["mongod"]
+    return None
+
+
+def should_use_specific_db(instance):
+    mongo = get_mongop(instance)
+    if not mongo:
+        return False
+    return float(mongo['cpu_percent']) >= 70
+

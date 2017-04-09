@@ -85,7 +85,9 @@ def get_instance_details(request):
                 "cpu": p_data['cpu_percent'],
                 "memory": p_data['memory_percent'],
                 "pid": p_data['pid'],
-                "threads": p_data['num_threads']
+                "threads": p_data['num_threads'],
+                'recommendation': "You should Download more ram",
+                'justification': "You are running out of ram"
             }
             processes.append(p)
         instance_stats = {'id': data['id'],
@@ -101,7 +103,11 @@ def get_instance_details(request):
                  "ip": data['meta']['public-ipv4'],
                  "id": data['id']
                 },
-              "processes": processes
+              "processes": processes,
+              "top_25_cpu": processes,
+              "top_25_mem": processes,
+              "bottom_25_cpu": processes,
+              "bottom_25_mem": processes
              }
         return JsonResponse(instance_stats)
 
