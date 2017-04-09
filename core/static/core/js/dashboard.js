@@ -373,6 +373,13 @@ $(document).ready(function () {
         draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
         draw_multi_chart(draw);
     });
+    setInterval($.get("/get_all_time_series/", function (data) {
+            var draw = [];
+            draw.push({"name": "CPU", "data": data["CPU"]});
+            draw.push({"name": "Memory", "data": data["MEM"]});
+            draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
+            draw_multi_chart(draw);
+        }), 5000);
 
 });
 
