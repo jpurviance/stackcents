@@ -74,9 +74,6 @@ var master_theme = {
         series: {
             dataLabels: {
                 color: '#B0B0B3'
-            },
-            marker: {
-                lineColor: '#333'
             }
         },
         boxplot: {
@@ -87,6 +84,9 @@ var master_theme = {
         },
         errorbar: {
             color: 'white'
+        },
+        marker: {
+            enabled: false
         }
     },
     legend: {
@@ -241,8 +241,11 @@ function draw_instance_metrics(data, name) {
         },
 
         plotOptions: {
-            series: {
-                pointStart: 2010
+            // series: {
+            //     pointStart: 2010
+            // },
+            marker: {
+                enabled: false
             }
         },
 
@@ -268,7 +271,7 @@ $(document).ready(function () {
         console.log(res);
         draw.push({"name": "CPU", "data": res["CPU"]});
         draw.push({"name": "Memory", "data": res["MEM"]});
-        draw.push({"name":"Disk Read-Write", "data":res["STORAGE"]});
+        draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
         draw_instance_metrics(draw, res["id"])
     });
 
