@@ -414,6 +414,14 @@ $(document).ready(function () {
         });
     }, 3000);
 
+    $.get("/everything?instance="+$("#ec2_id").attr("data-id"),function (res) {
+        $("#full").val(JSON.stringify(res));
+        $("#full").css("width","100%");
+        $("#full").css("height","200px");
+    });
+
+
+
 
 });
 
