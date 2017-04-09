@@ -105,7 +105,8 @@ def should_use_rds(process):
    postgres = get_postgres(process)
     if not postgres:
         return False
-    return float(postgres['cpu_percent']) >= 70 
+    #return float(postgres['cpu_percent']) >= 70 
+    return True
 
 def should_use_dynamo(process):
     mongo = get_mongop(process)
