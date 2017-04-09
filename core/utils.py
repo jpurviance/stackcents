@@ -278,6 +278,9 @@ def should_pay_upfront(instance):
     return float(instance['meta']['uptime']) > 86400
 
 
+def get_instance_rec(instance):
+    r,j = decide_instance_rec(instance)
+    return {"recommendation": r, "justification": j}
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
