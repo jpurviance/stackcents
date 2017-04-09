@@ -1,4 +1,5 @@
 import json
+import datetime
 import statistics
 
 from models import EC2
@@ -124,6 +125,12 @@ def decide_rec(process):
     else:
         return None, None
 
+def should_add_disk_space(instance):
+    return float(instance['disk']['percent']) >= 70
+
+def should_pay_upfront(instance):
+    #return float(instance['meta']['uptime']) > 24000000
+    return float(instance['meta']['uptime']) > 86400
 
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
