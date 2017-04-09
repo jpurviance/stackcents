@@ -1,4 +1,5 @@
 import json
+import statistics
 
 from models import EC2
 
@@ -96,5 +97,12 @@ def should_use_specific_db(instance):
     return float(mongo['cpu_percent']) >= 70
 
 def should_lambda(instance):
+    #lambda_list = []
     process_list = instance['processes']
-    # now iter
+    for process in process_list:
+        mx = max(proc['cpu_percent'] for proc in process)
+        md = statistics.median(proc['cpu_percent'] for proc in process)
+        if float(mx) - float(md) >= 70:
+            return True
+    return False     
+
