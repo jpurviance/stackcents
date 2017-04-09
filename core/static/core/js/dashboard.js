@@ -208,15 +208,16 @@ function populate_cloud_stats(json) {
     $("#ec2_total").empty();
     function dynamicSort(property) {
         var sortOrder = 1;
-        if(property[0] === "-") {
+        if (property[0] === "-") {
             sortOrder = -1;
             property = property.substr(1);
         }
-        return function (a,b) {
+        return function (a, b) {
             var result = (a[property] < b[property]) ? -1 : (a[property] > b[property]) ? 1 : 0;
             return result * sortOrder;
         }
     }
+
     var ec2s = json["total"];
     ec2s.sort(dynamicSort("id"));
     for (var i = 0; i < ec2s.length; i++) {
@@ -251,6 +252,8 @@ function draw_multi_chart(data) {
         plotOptions: {
             series: {
                 pointStart: 2010
+            }, line: {
+                animation: false
             }
         },
 
@@ -277,6 +280,18 @@ $(document).ready(function () {
         chart = draw_multi_chart(draw);
     });
 
+    setInterval(function () {
+        // $("#total_wrapper").empty();
+        // $("#total_wrapper").append('<div id="total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>');
+        $.get("/get_all_time_series/", function (data) {
+            var draw = [];
+            draw.push({"name": "CPU", "data": data["CPU"]});
+            draw.push({"name": "Memory", "data": data["MEM"]});
+            draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
+            draw.push({"name": "Swap Usage", "data": data["SWAP"]});
+            chart = draw_multi_chart(draw);
+        });
+    },3000);
 
 });
 
