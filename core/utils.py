@@ -187,6 +187,56 @@ def get_top_25_cpu(processes):
         plist.append(p)
     return plist
 
+def get_top_25_mem(processes):
+    processes_mem = list(
+        sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
+               key=lambda x: x[1]))
+    fourth = max(len(processes_mem) // 4, 1)
+    top_25 = processes_mem[:fourth]
+    just_proc = map(lambda x: x[0], top_25)
+    plist = []
+    for proc in just_proc:
+        p_data = list(sorted(proc, key=lambda x: x['index']))[-1]
+        name = proc[0]['name']
+        result = get_top_25_mem_rec(proc)
+        p = {
+            "name": name,
+            "command_line": p_data['cmdline'],
+            "cpu": p_data['cpu_percent'],
+            "memory": p_data['memory_percent'],
+            "pid": p_data['pid'],
+            "threads": p_data['num_threads'],
+            'recommendation': result["recommendation"],
+            'justification': result["justification"]
+        }
+        plist.append(p)
+    return plist
+
+def get_bottom_25_mem(processes):
+    processes_mem = list(
+        sorted([(proc, float(list(sorted(proc, key=lambda x: x['index']))[-1]['memory_percent'])) for proc in processes],
+               key=lambda x: x[1], reverse=True))
+    fourth = max(len(processes_mem) // 4, 1)
+    top_25 = processes_mem[:fourth]
+    just_proc = map(lambda x: x[0], top_25)
+    plist = []
+    for proc in just_proc:
+        p_data = list(sorted(proc, key=lambda x: x['index']))[-1]
+        name = proc[0]['name']
+        result = get_bottom_25_mem_rec(proc)
+        p = {
+            "name": name,
+            "command_line": p_data['cmdline'],
+            "cpu": p_data['cpu_percent'],
+            "memory": p_data['memory_percent'],
+            "pid": p_data['pid'],
+            "threads": p_data['num_threads'],
+            'recommendation': result["recommendation"],
+            'justification': result["justification"]
+        }
+        plist.append(p)
+    return plist
+
 
 def get_bot_25_cpu(processes):
     processes_cpu = list(
