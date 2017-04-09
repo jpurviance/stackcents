@@ -169,11 +169,23 @@ def get_top_25_cpu(processes):
     fourth = max(len(processes_cpu) // 4, 1)
     top_25 = processes_cpu[:fourth]
     just_proc = map(lambda x: x[0], top_25)
+    plist = []
     for proc in just_proc:
+        p_data = list(sorted(proc, key=lambda x: x['index']))[-1]
+        name = proc[0]['name']
         result = get_top_25_cpu_rec(proc)
-        just_proc["recommendation"] = result["recommendation"]
-        just_proc["justification"] = result["justification"]
-    return just_proc
+        p = {
+            "name": name,
+            "command_line": p_data['cmdline'],
+            "cpu": p_data['cpu_percent'],
+            "memory": p_data['memory_percent'],
+            "pid": p_data['pid'],
+            "threads": p_data['num_threads'],
+            'recommendation': result["recommendation"],
+            'justification': result["justification"]
+        }
+        plist.append(p)
+    return plist
 
 
 def get_bot_25_cpu(processes):
@@ -183,8 +195,20 @@ def get_bot_25_cpu(processes):
     fourth = max(len(processes_cpu) // 4, 1)
     bot_25 = processes_cpu[:fourth]
     just_proc = map(lambda x: x[0], bot_25)
+    plist = []
     for proc in just_proc:
+        p_data = list(sorted(proc, key=lambda x: x['index']))[-1]
+        name = proc[0]['name']
         result = get_bottom_25_cpu_rec(proc)
-        just_proc["recommendation"] = result["recommendation"]
-        just_proc["justification"] = result["justification"]
-    return just_proc
+        p = {
+            "name": name,
+            "command_line": p_data['cmdline'],
+            "cpu": p_data['cpu_percent'],
+            "memory": p_data['memory_percent'],
+            "pid": p_data['pid'],
+            "threads": p_data['num_threads'],
+            'recommendation': result["recommendation"],
+            'justification': result["justification"]
+        }
+        plist.append(p)
+    return plist
