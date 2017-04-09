@@ -176,3 +176,17 @@ def get_script(request):
     nohup python eventloop.py </dev/null > hype.log 2>&1 &\n
     """
     return HttpResponse(script, content_type='text/plain')
+
+@csrf_exempt
+def everything(request):
+    instance = request.GET.get('instance', None)
+    if instance is None:
+        return HttpResponse(status=404)
+    try:
+        name = instance
+        instance = EC2.objects.get(name=instance)
+        data = get_json(instance)
+        return JsonResponse(data)
+    except EC2.DoesNotExist:
+
+        return HttpResponse(status=400)
