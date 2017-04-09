@@ -32,6 +32,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'core/css/dashboard.css' %}" rel="stylesheet">
+    <link href="{% static 'core/css/ec2.css' %}" rel="stylesheet">
     <script src="{% static 'core/js/ec2.js' %}"></script>
 
 </head>
@@ -48,14 +49,12 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a id="name" class="navbar-brand" href="#">StackCents <i class="fa fa-align-center" aria-hidden="true"></i></a>
+            <a id="name" class="navbar-brand" href="/">StackCents <i class="fa fa-align-center" aria-hidden="true"></i></a>
         </div>
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Dashboard</a></li>
-                <li><a href="#">Settings</a></li>
-                <li><a href="#">Profile</a></li>
-                <li><a href="#">Help</a></li>
+                <li><a href="/"><i class="fa fa-map-o" aria-hidden="true"></i> Dashboard</a></li>
+                <li><a href="/full_list/"><i class="fa fa-cloud" aria-hidden="true"></i> Instance List </a></li>
             </ul>
         </div>
     </div>
@@ -65,16 +64,17 @@
     <div class="row">
         <div class="col-sm-3 col-md-2 sidebar">
             <ul class="nav nav-sidebar">
-                <li class="active"><a href="#">Overview <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Analytics</a></li>
-                <li><a href="#">Export</a></li>
+                <li><a href="/"><i class="fa fa-map-o" aria-hidden="true"></i> Dashboard</a></li>
+                <li><a href="/full_list/"><i class="fa fa-cloud" aria-hidden="true"></i> Instance List</a></li>
             </ul>
             <ul class="nav nav-sidebar">
-                <li><a href="">Nav item</a></li>
-                <li><a href="">Nav item again</a></li>
-                <li><a href="">One more nav</a></li>
-                <li><a href="">Another nav item</a></li>
+                <li><a href="https://aws.amazon.com/"><i class="fa fa-desktop" aria-hidden="true"></i> AWS</a></li>
+                <li><a href="https://aws.amazon.com/products/"><i class="fa fa-database" aria-hidden="true"></i> Cloud
+                    Products</a></li>
+                <li><a href="https://aws.amazon.com/ec2/pricing/"><i class="fa fa-credit-card-alt"
+                                                                     aria-hidden="true"></i> Compute Costs</a></li>
+                <li><a href="https://aws.amazon.com/contact-us/"><i class="fa fa-phone" aria-hidden="true"></i> Contact
+                    AWS</a></li>
                 <li><a href="">More navigation</a></li>
             </ul>
             <ul class="nav nav-sidebar">
@@ -104,20 +104,49 @@
             </table>
             <br>
 
-            <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Instance ID</th>
-                        <th>CPU Utilization</th>
-                        <th>Memory Utilization</th>
-                        <th>Storage Utilization</th>
-                        <th>Network Utilization</th>
-                    </tr>
-                    </thead>
-                    <tbody id="ec2_total">
-                    </tbody>
-                </table>
+            <div class="row">
+                <div class="col-xs-6">
+                    <h3>Highest CPU Usage</h3>
+                    <ul class="list-group" id="top_cpu">
+{#                        <li class="list-group-item">Cras justo odio</li>#}
+{#                        <li class="list-group-item">Dapibus ac facilisis in</li>#}
+{#                        <li class="list-group-item">Morbi leo risus</li>#}
+{#                        <li class="list-group-item">Porta ac consectetur ac</li>#}
+{#                        <li class="list-group-item">Vestibulum at eros</li>#}
+                    </ul>
+                </div>
+                <div class="col-xs-6">
+                    <h3>Highest Memory Usage</h3>
+                    <ul class="list-group" id="top_mem">
+{#                        <li class="list-group-item">Cras justo odio</li>#}
+{#                        <li class="list-group-item">Dapibus ac facilisis in</li>#}
+{#                        <li class="list-group-item">Morbi leo risus</li>#}
+{#                        <li class="list-group-item">Porta ac consectetur ac</li>#}
+{#                        <li class="list-group-item">Vestibulum at eros</li>#}
+                    </ul>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-6">
+                    <h3>Least CPU Usage</h3>
+                    <ul class="list-group" id="bot_cpu">
+{#                        <li class="list-group-item">Cras justo odio</li>#}
+{#                        <li class="list-group-item">Dapibus ac facilisis in</li>#}
+{#                        <li class="list-group-item">Morbi leo risus</li>#}
+{#                        <li class="list-group-item">Porta ac consectetur ac</li>#}
+{#                        <li class="list-group-item">Vestibulum at eros</li>#}
+                    </ul>
+                </div>
+                <div class="col-xs-6">
+                    <h3>Least Memory Usage</h3>
+                    <ul class="list-group" id="bot_mem">
+{#                        <li class="list-group-item">Cras justo odio</li>#}
+{#                        <li class="list-group-item">Dapibus ac facilisis in</li>#}
+{#                        <li class="list-group-item">Morbi leo risus</li>#}
+{#                        <li class="list-group-item">Porta ac consectetur ac</li>#}
+{#                        <li class="list-group-item">Vestibulum at eros</li>#}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -14,3 +14,6 @@ def ec2(request):
     ec2_id = request.GET.get("instance", "-1")
     context = {"id": ec2_id}
     return render(request, "core/ec2.html", context)
+
+def full_list(request):
+    return (render(request, "core/full_list.html", {}))

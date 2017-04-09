@@ -1,6 +1,3 @@
-/**
- * Created by John on 4/8/17.
- */
 var master_theme = {
     colors: ['#2b908f', '#90ee7e', '#f45b5b', '#7798BF', '#aaeeee', '#ff0066', '#eeaaee',
         '#55BF3B', '#DF5353', '#7798BF', '#aaeeee'],
@@ -74,9 +71,6 @@ var master_theme = {
         series: {
             dataLabels: {
                 color: '#B0B0B3'
-            },
-            marker: {
-                lineColor: '#333'
             }
         },
         boxplot: {
@@ -87,6 +81,9 @@ var master_theme = {
         },
         errorbar: {
             color: 'white'
+        },
+        marker: {
+            enabled: false
         }
     },
     legend: {
@@ -219,6 +216,120 @@ function ec2_data(json) {
     $("#cpu").text("Number of CPUs: " + json["metadata"]["num_cpu"]);
     $("#ip").text("IP: " + json["metadata"]["ip"]);
 
+    $("#top_cpu").empty();
+    $("#top_mem").empty();
+    for (var i = 0; i < json["top_25_cpu"].length; i++) {
+        var place = '<li class="list-group-item"><h4>' + json['top_25_cpu'][i]["name"] + "</h4>";
+        place = place + "<br><h4>Command: " + json['top_25_cpu'][i]["command_line"].join(" ");
+        place = place + '</h4><div class="table-responsive" >' +
+            '<table class="table table-striped">' +
+            '<thead><tr>' +
+            '<th>PID</th>' +
+            '<th>CPU %</th>' +
+            '<th>Memory %</th>' +
+            '<th>Thread Count</th>' +
+            '</tr></thead>' +
+            "<tbody>" +
+            '<tr>' +
+            '<td>' + json['top_25_cpu'][i]["pid"] + '</td>' +
+            '<td>' + json['top_25_cpu'][i]["cpu"].toFixed(2) + '</td>' +
+            '<td>' + json['top_25_cpu'][i]["memory"].toFixed(2) + '</td>' +
+            '<td>' + json['top_25_cpu'][i]["threads"] + '</td>' +
+            '</tr>' +
+            "</tbody>" +
+            '</table>';
+        place = place + '</div>';
+        place = place + "<h4>Flagged for: </h4>" + json['top_25_cpu'][i]["justification"] + "<br>";
+        place = place + "<h4>Recommendation: </h4> " + json['top_25_cpu'][i]["recommendation"] + "<br>";
+        place = place + "</li>";
+        $("#top_cpu").append(place);
+    }
+
+    for (var i = 0; i < json["top_25_mem"].length; i++) {
+        var place = '<li class="list-group-item"><h4>' + json['top_25_mem'][i]["name"] + "</h4>";
+        place = place + "<br><h4>Command: " + json['top_25_mem'][i]["command_line"].join(" ");
+        place = place + '</h4><div class="table-responsive" >' +
+            '<table class="table table-striped">' +
+            '<thead><tr>' +
+            '<th>PID</th>' +
+            '<th>CPU %</th>' +
+            '<th>Memory %</th>' +
+            '<th>Thread Count</th>' +
+            '</tr></thead>' +
+            "<tbody>" +
+            '<tr>' +
+            '<td>' + json['top_25_mem'][i]["pid"] + '</td>' +
+            '<td>' + json['top_25_mem'][i]["cpu"].toFixed(2) + '</td>' +
+            '<td>' + json['top_25_mem'][i]["memory"].toFixed(2) + '</td>' +
+            '<td>' + json['top_25_mem'][i]["threads"] + '</td>' +
+            '</tr>' +
+            "</tbody>" +
+            '</table>';
+        place = place + '</div>';
+        place = place + "<h4>Flagged for: </h4>" + json['top_25_mem'][i]["justification"] + "<br>";
+        place = place + "<h4>Recommendation: </h4> " + json['top_25_mem'][i]["recommendation"] + "<br>";
+        place = place + "</li>";
+        $("#top_mem").append(place);
+    }
+
+    $("#bot_cpu").empty();
+    $("#bot_mem").empty();
+
+    for (var i = 0; i < json["bottom_25_cpu"].length; i++) {
+        var place = '<li class="list-group-item"><h4>' + json['bottom_25_cpu'][i]["name"] + "</h4>";
+        place = place + "<br><h4>Command: " + json['bottom_25_cpu'][i]["command_line"].join(" ");
+        place = place + '</h4><div class="table-responsive" >' +
+            '<table class="table table-striped">' +
+            '<thead><tr>' +
+            '<th>PID</th>' +
+            '<th>CPU %</th>' +
+            '<th>Memory %</th>' +
+            '<th>Thread Count</th>' +
+            '</tr></thead>' +
+            "<tbody>" +
+            '<tr>' +
+            '<td>' + json['bottom_25_cpu'][i]["pid"] + '</td>' +
+            '<td>' + json['bottom_25_cpu'][i]["cpu"].toFixed(2) + '</td>' +
+            '<td>' + json['bottom_25_cpu'][i]["memory"].toFixed(2) + '</td>' +
+            '<td>' + json['bottom_25_cpu'][i]["threads"] + '</td>' +
+            '</tr>' +
+            "</tbody>" +
+            '</table>';
+        place = place + '</div>';
+        place = place + "<h4>Flagged for: </h4>" + json['bottom_25_cpu'][i]["justification"] + "<br>";
+        place = place + "<h4>Recommendation: </h4> " + json['bottom_25_cpu'][i]["recommendation"] + "<br>";
+        place = place + "</li>";
+        $("#bot_cpu").append(place);
+    }
+
+    for (var i = 0; i < json["bottom_25_mem"].length; i++) {
+        var place = '<li class="list-group-item"><h4>' + json['bottom_25_mem'][i]["name"] + "</h4>";
+        place = place + "<br><h4>Command: " + json['bottom_25_mem'][i]["command_line"].join(" ");
+        place = place + '</h4><div class="table-responsive" >' +
+            '<table class="table table-striped">' +
+            '<thead><tr>' +
+            '<th>PID</th>' +
+            '<th>CPU %</th>' +
+            '<th>Memory %</th>' +
+            '<th>Thread Count</th>' +
+            '</tr></thead>' +
+            "<tbody>" +
+            '<tr>' +
+            '<td>' + json['bottom_25_mem'][i]["pid"] + '</td>' +
+            '<td>' + json['bottom_25_mem'][i]["cpu"].toFixed(2) + '</td>' +
+            '<td>' + json['bottom_25_mem'][i]["memory"].toFixed(2) + '</td>' +
+            '<td>' + json['bottom_25_mem'][i]["threads"] + '</td>' +
+            '</tr>' +
+            "</tbody>" +
+            '</table>';
+        place = place + '</div>';
+        place = place + "<h4>Flagged for: </h4>" + json['bottom_25_mem'][i]["justification"] + "<br>";
+        place = place + "<h4>Recommendation: </h4>" + json['bottom_25_mem'][i]["recommendation"] + "<br>";
+        place = place + "</li>";
+        $("#bot_mem").append(place);
+    }
+
+
 }
 
 function draw_instance_metrics(data, name) {
@@ -226,7 +337,7 @@ function draw_instance_metrics(data, name) {
     Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
         title: {
-            text: 'System Resource Utilization for: ' + name
+            text: 'System Resource Utilization:  ' + name
         },
 
         yAxis: {
@@ -241,8 +352,11 @@ function draw_instance_metrics(data, name) {
         },
 
         plotOptions: {
-            series: {
-                pointStart: 2010
+            // series: {
+            //     pointStart: 2010
+            // },
+            marker: {
+                enabled: false
             }
         },
 
@@ -268,7 +382,7 @@ $(document).ready(function () {
         console.log(res);
         draw.push({"name": "CPU", "data": res["CPU"]});
         draw.push({"name": "Memory", "data": res["MEM"]});
-        draw.push({"name":"Disk Read-Write", "data":res["STORAGE"]});
+        draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
         draw_instance_metrics(draw, res["id"])
     });
 
