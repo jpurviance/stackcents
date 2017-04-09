@@ -307,7 +307,7 @@ def decide_instance_rec(instance):
                                                                        "this hack only checks for an uptime of over a day as a proof of concept."
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
-               "hardware limitations", "A larger tier node would allow you to give amazon more money "
+               "hardware limitations", "A larger tier node would your apps to not compete with one another"
     return None, None
 
 
