@@ -273,7 +273,6 @@ def decide_rec(process):
 
 
 def should_add_disk_space(instance):
-    print(instance['disk'])
     return float(instance['disk']['percent']) >= 90
 
 
@@ -282,10 +281,10 @@ def should_pay_upfront(instance):
     return float(instance['meta']['uptime']) > 86400
 
 def should_recommend_special_disk(instance):
-    return float(instance['storage']['%util']) >= 70
+    return float(instance['storage'][0]['%util']) >= 70
 
 def should_add_ram(instance):
-    return float(instance['mem']['%memused']) >= 70
+    return float(instance['mem'][0]['%memused']) >= 70
 
 def get_instance_rec(instance):
     r,j = decide_instance_rec(instance)
