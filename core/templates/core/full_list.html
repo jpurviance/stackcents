@@ -32,8 +32,7 @@
 
     <!-- Custom styles for this template -->
     <link href="{% static 'core/css/dashboard.css' %}" rel="stylesheet">
-     <link href="{% static 'core/css/ec2.css' %}" rel="stylesheet">
-    <script src="{% static 'core/js/ec2.js' %}"></script>
+    <script src="{% static 'core/js/full_list.js' %}"></script>
 
 </head>
 
@@ -54,7 +53,7 @@
         <div id="navbar" class="navbar-collapse collapse">
             <ul class="nav navbar-nav navbar-right">
                 <li><a href="/">Dashboard</a></li>
-                <li><a href="/full_list/">Instance List</a></li>
+                <li><a href="#">Instance List</a></li>
             </ul>
         </div>
     </div>
@@ -83,52 +82,26 @@
             </ul>
         </div>
         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-            <h1 class="page-header">System Load</h1>
 
-            <div class="row placeholders">
-                <div id="total" style="min-width: 310px; height: 400px; margin: 0 auto"></div>
-            </div>
-
-            <h2 class="header" id="ec2_name">Cloud Stats</h2>
-            <table class="table">
-                <tbody>
-                <tr>
-                    <td style="font-weight: bold" id="hostname"></td>
-                    <td style="font-weight: bold" id="type"></td>
-                    <td style="font-weight: bold" id="os"></td>
-                    <td style="font-weight: bold" id="cpu"></td>
-                    <td style="font-weight: bold" id="ip"></td>
-                </tr>
-                </tbody>
-            </table>
-            <br>
-
-            <div class="row">
-                <div class="col-xs-6">
-                    <h3>Most Resource Intensive</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Morbi leo risus</li>
-                        <li class="list-group-item">Porta ac consectetur ac</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
-                    </ul>
-                </div>
-                <div class="col-xs-6">
-                    <h3>Least Resource Intensive</h3>
-                    <ul class="list-group">
-                        <li class="list-group-item">Cras justo odio</li>
-                        <li class="list-group-item">Dapibus ac facilisis in</li>
-                        <li class="list-group-item">Morbi leo risus</li>
-                        <li class="list-group-item">Porta ac consectetur ac</li>
-                        <li class="list-group-item">Vestibulum at eros</li>
-                    </ul>
-                </div>
+            <h1 class="sub-header">All Instances</h1>
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Instance ID</th>
+                        <th>CPU Utilization</th>
+                        <th>Memory Utilization</th>
+                        <th>Storage Utilization</th>
+                        <th>Network Utilization</th>
+                    </tr>
+                    </thead>
+                    <tbody id="ec2_total">
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>
 </div>
-<div id="ec2_id" data-id="{{ id }}"></div>
 
 <!-- Bootstrap core JavaScript
 ================================================== -->
