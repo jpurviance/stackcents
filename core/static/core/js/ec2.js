@@ -352,12 +352,15 @@ function draw_instance_metrics(data, name) {
         },
 
         plotOptions: {
-            // series: {
-            //     pointStart: 2010
-            // },
-            marker: {
-                enabled: false
+            series: {
+                pointStart: 2010
+            },
+            line: {
+                marker: {
+                    enabled: false
+                }
             }
+
         },
 
         series: data
