@@ -51,7 +51,7 @@ def get_instances_summary(request):
     l = []
     for data in all_data:
         t = {'id': data['id'],
-             'cpu': list(sorted(data['cpu'],key=lambda x: x['index']))[-1]['load_avg_1'],
+             'cpu': list(sorted(data['cpu'], key=lambda x: x['index']))[-1]['load_avg_1'],
              'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
              'network': 100000,
              'storage': list(sorted(data['storage'], key=lambda x: x['index']))[-1]['%util']
@@ -69,9 +69,6 @@ def get_cpu_for_instance(request, instance):
         return HttpResponse(status=404)
 
 
-
-
-
 @csrf_exempt
 def get_instance_details(request):
     instance = request.GET.get('instance', None)
@@ -83,7 +80,7 @@ def get_instance_details(request):
         processes = []
         for process in data['processes']:
             name = process[0]['name']
-            p_data = list(sorted(process,key=lambda x: x['index']))[-1]
+            p_data = list(sorted(process, key=lambda x: x['index']))[-1]
             p = {
                 "name": name,
                 "command_line": p_data['cmdline'],
@@ -96,24 +93,24 @@ def get_instance_details(request):
             }
             processes.append(p)
         instance_stats = {'id': data['id'],
-             'cpu': list(sorted(data['cpu'],key=lambda x: x['index']))[-1]['load_avg_1'],
-             'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
-             'network': 100000,
-             'storage': list(sorted(data['storage'], key=lambda x: x['index']))[-1]['%util'],
-             'metadata': {
-                 "num_cpu": data['meta']['num_cpu']['num_cpu'],
-                 "os":  data["meta"]["os"],
-                 "hostname": data['meta']['hostname'],
-                 "type": data['meta']['instance-type'],
-                 "ip": data['meta']['public-ipv4'],
-                 "id": data['id']
-                },
-              "processes": processes,
-              "top_25_cpu": get_top_25_cpu(data['processes']),
-              "top_25_mem": get_top_25_mem(data['processes']),
-              "bottom_25_cpu": get_bot_25_cpu(data['processes']),
-              "bottom_25_mem": get_bottom_25_mem(data['processes'])
-             }
+                          'cpu': list(sorted(data['cpu'], key=lambda x: x['index']))[-1]['load_avg_1'],
+                          'memory': list(sorted(data['mem'], key=lambda x: x['index']))[-1]['%memused'],
+                          'network': 100000,
+                          'storage': list(sorted(data['storage'], key=lambda x: x['index']))[-1]['%util'],
+                          'metadata': {
+                              "num_cpu": data['meta']['num_cpu']['num_cpu'],
+                              "os": data["meta"]["os"],
+                              "hostname": data['meta']['hostname'],
+                              "type": data['meta']['instance-type'],
+                              "ip": data['meta']['public-ipv4'],
+                              "id": data['id']
+                          },
+                          "processes": processes,
+                          "top_25_cpu": get_top_25_cpu(data['processes']),
+                          "top_25_mem": get_top_25_mem(data['processes']),
+                          "bottom_25_cpu": get_bot_25_cpu(data['processes']),
+                          "bottom_25_mem": get_bottom_25_mem(data['processes'])
+                          }
         return JsonResponse(instance_stats)
 
     except EC2.DoesNotExist:
@@ -125,18 +122,17 @@ def get_all_time_series(request):
     return JsonResponse({"CPU": get_all_cpu_timeseries(), "MEM": get_all_mem_timeseries(),
                          "STORAGE": get_all_storage_timeseries()})
 
+
 @csrf_exempt
 def get_recommendation(request):
     return JsonResponse({'recommendation': "You should Download more ram",
                          'justification': "You are running out of ram"})
 
 
-
 @csrf_exempt
 def get_time_series(request):
     instance = request.GET.get('instance', None)
     if instance is None:
-
         return HttpResponse(status=404)
     try:
         name = instance
@@ -147,3 +143,18 @@ def get_time_series(request):
     except EC2.DoesNotExist:
 
         return HttpResponse(status=400)
+
+
+def get_script(request):
+    script = """
+    yum -y install git\n
+    git clone https://github.com/ewmson/glowing-meme.git\n
+    cd glowing-meme\n
+    yum -y install gcc\n
+    yum -y install sysstat\n
+    systemctl enable sysstat\n
+    pip install -r requirements.txt\n
+    pip install --upgrade requests\n
+    nohup python eventloop.py </dev/null > hype.log 2>&1 &\n
+    """
+    return HttpResponse(script, content_type='text/plain')
