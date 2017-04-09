@@ -84,7 +84,8 @@ var master_theme = {
         style: {
             fontFamily: '\'Unica One\', sans-serif'
         },
-        plotBorderColor: '#606063'
+        plotBorderColor: '#606063',
+
     },
     title: {
         style: {
@@ -308,25 +309,11 @@ function draw_multi_chart(data) {
             }
         },
 
-        series: data,
-        chart: {
-            events: {
-                load: function () {
-                    var serites = this.series;
-                    setInterval($.get("/get_all_time_series/", function (data) {
-                        var draw = [];
-                        draw.push({"name": "CPU", "data": data["CPU"]});
-                        draw.push({"name": "Memory", "data": data["MEM"]});
-                        draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
-                        serites[0].setData(draw);
-                        console.log('called');
-                    }), 1000);
-                }
-            }
-        }
+        series: data
 
     }));
 }
+
 
 
 $(document).ready(function () {
@@ -381,7 +368,6 @@ $(document).ready(function () {
     setInterval(function () {
         $.get("/get_instances_summary/", populate_cloud_stats);
     }, 5000);
-
     $.get("/get_all_time_series/", function (data) {
         var draw = [];
         draw.push({"name": "CPU", "data": data["CPU"]});
