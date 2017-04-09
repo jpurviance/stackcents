@@ -380,15 +380,18 @@ $(document).ready(function () {
     //     $.get("/get_instances_summary/", populate_cloud_stats);
     // }, 5000);
 
-    $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
-        var draw = [];
-        console.log(res);
-        draw.push({"name": "CPU", "data": res["CPU"]});
-        draw.push({"name": "Memory", "data": res["MEM"]});
-        draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
-        draw.push({"name": "Swap Usage", "data": res["SWAP"]});
-        draw_instance_metrics(draw, res["id"])
-    });
+    setInterval(function () {
+        $.get("/get_time_series/?instance=" + $("#ec2_id").attr("data-id"), function (res) {
+            var draw = [];
+            console.log(res);
+            draw.push({"name": "CPU", "data": res["CPU"]});
+            draw.push({"name": "Memory", "data": res["MEM"]});
+            draw.push({"name": "Disk Read-Write", "data": res["STORAGE"]});
+            draw.push({"name": "Swap Usage", "data": res["SWAP"]});
+            draw_instance_metrics(draw, res["id"])
+        });
+    }, 3000);
+
 
 });
 
