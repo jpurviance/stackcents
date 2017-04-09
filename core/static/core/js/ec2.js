@@ -219,120 +219,131 @@ function ec2_data(json) {
     $("#top_cpu").empty();
     $("#top_mem").empty();
     for (var i = 0; i < json["top_25_cpu"].length; i++) {
-        var place = '<li class="list-group-item"><h4>' + json['top_25_cpu'][i]["name"] + "</h4>";
-        place = place + "<br><h4>Command: " + json['top_25_cpu'][i]["command_line"].join(" ");
-        place = place + '</h4><div class="table-responsive" >' +
-            '<table class="table table-striped">' +
-            '<thead><tr>' +
-            '<th>PID</th>' +
-            '<th>CPU %</th>' +
-            '<th>Memory %</th>' +
-            '<th>Thread Count</th>' +
-            '</tr></thead>' +
-            "<tbody>" +
-            '<tr>' +
-            '<td>' + json['top_25_cpu'][i]["pid"] + '</td>' +
-            '<td>' + json['top_25_cpu'][i]["cpu"].toFixed(2) + '</td>' +
-            '<td>' + json['top_25_cpu'][i]["memory"].toFixed(2) + '</td>' +
-            '<td>' + json['top_25_cpu'][i]["threads"] + '</td>' +
-            '</tr>' +
-            "</tbody>" +
-            '</table>';
-        place = place + '</div>';
-        place = place + "<h4>Flagged for: </h4>" + json['top_25_cpu'][i]["justification"] + "<br>";
-        place = place + "<h4>Recommendation: </h4> " + json['top_25_cpu'][i]["recommendation"] + "<br>";
-        place = place + "</li>";
-        $("#top_cpu").append(place);
+        if ("DO_NOT_USE" != json['top_25_cpu'][i]["recommendation"]) {
+            var place = '<li class="list-group-item"><h4>' + json['top_25_cpu'][i]["name"] + "</h4>";
+            place = place + "<br><h4>Command: " + json['top_25_cpu'][i]["command_line"].join(" ");
+            place = place + '</h4><div class="table-responsive" >' +
+                '<table class="table table-striped">' +
+                '<thead><tr>' +
+                '<th>PID</th>' +
+                '<th>CPU %</th>' +
+                '<th>Memory %</th>' +
+                '<th>Thread Count</th>' +
+                '</tr></thead>' +
+                "<tbody>" +
+                '<tr>' +
+                '<td>' + json['top_25_cpu'][i]["pid"] + '</td>' +
+                '<td>' + json['top_25_cpu'][i]["cpu"].toFixed(2) + '</td>' +
+                '<td>' + json['top_25_cpu'][i]["memory"].toFixed(2) + '</td>' +
+                '<td>' + json['top_25_cpu'][i]["threads"] + '</td>' +
+                '</tr>' +
+                "</tbody>" +
+                '</table>';
+            place = place + '</div>';
+            place = place + "<h4>Flagged for: </h4>" + json['top_25_cpu'][i]["justification"] + "<br>";
+            place = place + "<h4>Recommendation: </h4> " + json['top_25_cpu'][i]["recommendation"] + "<br>";
+            place = place + "</li>";
+            $("#top_cpu").append(place);
+        }
     }
 
     for (var i = 0; i < json["top_25_mem"].length; i++) {
-        var place = '<li class="list-group-item"><h4>' + json['top_25_mem'][i]["name"] + "</h4>";
-        place = place + "<br><h4>Command: " + json['top_25_mem'][i]["command_line"].join(" ");
-        place = place + '</h4><div class="table-responsive" >' +
-            '<table class="table table-striped">' +
-            '<thead><tr>' +
-            '<th>PID</th>' +
-            '<th>CPU %</th>' +
-            '<th>Memory %</th>' +
-            '<th>Thread Count</th>' +
-            '</tr></thead>' +
-            "<tbody>" +
-            '<tr>' +
-            '<td>' + json['top_25_mem'][i]["pid"] + '</td>' +
-            '<td>' + json['top_25_mem'][i]["cpu"].toFixed(2) + '</td>' +
-            '<td>' + json['top_25_mem'][i]["memory"].toFixed(2) + '</td>' +
-            '<td>' + json['top_25_mem'][i]["threads"] + '</td>' +
-            '</tr>' +
-            "</tbody>" +
-            '</table>';
-        place = place + '</div>';
-        place = place + "<h4>Flagged for: </h4>" + json['top_25_mem'][i]["justification"] + "<br>";
-        place = place + "<h4>Recommendation: </h4> " + json['top_25_mem'][i]["recommendation"] + "<br>";
-        place = place + "</li>";
-        $("#top_mem").append(place);
+        if ("DO_NOT_USE" != json['top_25_mem'][i]["recommendation"]) {
+            var place = '<li class="list-group-item"><h4>' + json['top_25_mem'][i]["name"] + "</h4>";
+            place = place + "<br><h4>Command: " + json['top_25_mem'][i]["command_line"].join(" ");
+            place = place + '</h4><div class="table-responsive" >' +
+                '<table class="table table-striped">' +
+                '<thead><tr>' +
+                '<th>PID</th>' +
+                '<th>CPU %</th>' +
+                '<th>Memory %</th>' +
+                '<th>Thread Count</th>' +
+                '</tr></thead>' +
+                "<tbody>" +
+                '<tr>' +
+                '<td>' + json['top_25_mem'][i]["pid"] + '</td>' +
+                '<td>' + json['top_25_mem'][i]["cpu"].toFixed(2) + '</td>' +
+                '<td>' + json['top_25_mem'][i]["memory"].toFixed(2) + '</td>' +
+                '<td>' + json['top_25_mem'][i]["threads"] + '</td>' +
+                '</tr>' +
+                "</tbody>" +
+                '</table>';
+            place = place + '</div>';
+            place = place + "<h4>Flagged for: </h4>" + json['top_25_mem'][i]["justification"] + "<br>";
+            place = place + "<h4>Recommendation: </h4> " + json['top_25_mem'][i]["recommendation"] + "<br>";
+            place = place + "</li>";
+            $("#top_mem").append(place);
+        }
+
     }
 
     $("#bot_cpu").empty();
     $("#bot_mem").empty();
 
     for (var i = 0; i < json["bottom_25_cpu"].length; i++) {
-        var place = '<li class="list-group-item"><h4>' + json['bottom_25_cpu'][i]["name"] + "</h4>";
-        place = place + "<br><h4>Command: " + json['bottom_25_cpu'][i]["command_line"].join(" ");
-        place = place + '</h4><div class="table-responsive" >' +
-            '<table class="table table-striped">' +
-            '<thead><tr>' +
-            '<th>PID</th>' +
-            '<th>CPU %</th>' +
-            '<th>Memory %</th>' +
-            '<th>Thread Count</th>' +
-            '</tr></thead>' +
-            "<tbody>" +
-            '<tr>' +
-            '<td>' + json['bottom_25_cpu'][i]["pid"] + '</td>' +
-            '<td>' + json['bottom_25_cpu'][i]["cpu"].toFixed(2) + '</td>' +
-            '<td>' + json['bottom_25_cpu'][i]["memory"].toFixed(2) + '</td>' +
-            '<td>' + json['bottom_25_cpu'][i]["threads"] + '</td>' +
-            '</tr>' +
-            "</tbody>" +
-            '</table>';
-        place = place + '</div>';
-        place = place + "<h4>Flagged for: </h4>" + json['bottom_25_cpu'][i]["justification"] + "<br>";
-        place = place + "<h4>Recommendation: </h4> " + json['bottom_25_cpu'][i]["recommendation"] + "<br>";
-        place = place + "</li>";
-        $("#bot_cpu").append(place);
+        if ("DO_NOT_USE" != json['bottom_25_cpu'][i]["recommendation"]) {
+            var place = '<li class="list-group-item"><h4>' + json['bottom_25_cpu'][i]["name"] + "</h4>";
+            place = place + "<br><h4>Command: " + json['bottom_25_cpu'][i]["command_line"].join(" ");
+            place = place + '</h4><div class="table-responsive" >' +
+                '<table class="table table-striped">' +
+                '<thead><tr>' +
+                '<th>PID</th>' +
+                '<th>CPU %</th>' +
+                '<th>Memory %</th>' +
+                '<th>Thread Count</th>' +
+                '</tr></thead>' +
+                "<tbody>" +
+                '<tr>' +
+                '<td>' + json['bottom_25_cpu'][i]["pid"] + '</td>' +
+                '<td>' + json['bottom_25_cpu'][i]["cpu"].toFixed(2) + '</td>' +
+                '<td>' + json['bottom_25_cpu'][i]["memory"].toFixed(2) + '</td>' +
+                '<td>' + json['bottom_25_cpu'][i]["threads"] + '</td>' +
+                '</tr>' +
+                "</tbody>" +
+                '</table>';
+            place = place + '</div>';
+            place = place + "<h4>Flagged for: </h4>" + json['bottom_25_cpu'][i]["justification"] + "<br>";
+            place = place + "<h4>Recommendation: </h4> " + json['bottom_25_cpu'][i]["recommendation"] + "<br>";
+            place = place + "</li>";
+            $("#bot_cpu").append(place);
+        }
+
     }
 
     for (var i = 0; i < json["bottom_25_mem"].length; i++) {
-        var place = '<li class="list-group-item"><h4>' + json['bottom_25_mem'][i]["name"] + "</h4>";
-        place = place + "<br><h4>Command: " + json['bottom_25_mem'][i]["command_line"].join(" ");
-        place = place + '</h4><div class="table-responsive" >' +
-            '<table class="table table-striped">' +
-            '<thead><tr>' +
-            '<th>PID</th>' +
-            '<th>CPU %</th>' +
-            '<th>Memory %</th>' +
-            '<th>Thread Count</th>' +
-            '</tr></thead>' +
-            "<tbody>" +
-            '<tr>' +
-            '<td>' + json['bottom_25_mem'][i]["pid"] + '</td>' +
-            '<td>' + json['bottom_25_mem'][i]["cpu"].toFixed(2) + '</td>' +
-            '<td>' + json['bottom_25_mem'][i]["memory"].toFixed(2) + '</td>' +
-            '<td>' + json['bottom_25_mem'][i]["threads"] + '</td>' +
-            '</tr>' +
-            "</tbody>" +
-            '</table>';
-        place = place + '</div>';
-        place = place + "<h4>Flagged for: </h4>" + json['bottom_25_mem'][i]["justification"] + "<br>";
-        place = place + "<h4>Recommendation: </h4>" + json['bottom_25_mem'][i]["recommendation"] + "<br>";
-        place = place + "</li>";
-        $("#bot_mem").append(place);
+        if ("DO_NOT_USE" != json['bottom_25_mem'][i]["recommendation"]) {
+            var place = '<li class="list-group-item"><h4>' + json['bottom_25_mem'][i]["name"] + "</h4>";
+            place = place + "<br><h4>Command: " + json['bottom_25_mem'][i]["command_line"].join(" ");
+            place = place + '</h4><div class="table-responsive" >' +
+                '<table class="table table-striped">' +
+                '<thead><tr>' +
+                '<th>PID</th>' +
+                '<th>CPU %</th>' +
+                '<th>Memory %</th>' +
+                '<th>Thread Count</th>' +
+                '</tr></thead>' +
+                "<tbody>" +
+                '<tr>' +
+                '<td>' + json['bottom_25_mem'][i]["pid"] + '</td>' +
+                '<td>' + json['bottom_25_mem'][i]["cpu"].toFixed(2) + '</td>' +
+                '<td>' + json['bottom_25_mem'][i]["memory"].toFixed(2) + '</td>' +
+                '<td>' + json['bottom_25_mem'][i]["threads"] + '</td>' +
+                '</tr>' +
+                "</tbody>" +
+                '</table>';
+            place = place + '</div>';
+            place = place + "<h4>Flagged for: </h4>" + json['bottom_25_mem'][i]["justification"] + "<br>";
+            place = place + "<h4>Recommendation: </h4>" + json['bottom_25_mem'][i]["recommendation"] + "<br>";
+            place = place + "</li>";
+            $("#bot_mem").append(place);
+        }
+
     }
 
     if (json["instance_recs"]["justification"] != "DO_NOT_USE") {
         var build = '<div class="panel-heading" style="background-color:#222222"><h3 style="text-align:center;color:white">Cost Optimization</h3>' +
             '</div><div class="panel-body">' +
-            '<div class="col-xs-6"><h4>Optimization:</h4>'+json["instance_recs"]["recommendation"]+'</div>' + '<div class="col-xs-6"><h4>Configuration Limitations: </h4>'+json["instance_recs"]["justification"]+'</div>'+
+            '<div class="col-xs-6"><h4>Optimization:</h4>' + json["instance_recs"]["recommendation"] + '</div>' + '<div class="col-xs-6"><h4>Configuration Limitations: </h4>' + json["instance_recs"]["justification"] + '</div>' +
             '</div>';
         $("#recs").append(build);
         console.log(build);
