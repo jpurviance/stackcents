@@ -126,14 +126,14 @@ def get_all_time_series(request):
                          "MEM": get_all_mem_timeseries(),
                          "STORAGE": get_all_storage_timeseries(),
                          "SWAP": get_all_swap_used_timeseries(),
-                         "MAX_SWAP": get_all_swap_used_timeseries_max(),
-                         "MIN_SWAP": get_all_swap_used_timeseries_min(),
-                         "MAX_STORAGE": get_all_storage_timeseries_max(),
-                         "MIN_STORAGE": get_all_storage_timeseries_min(),
-                         "MAX_MEM": get_all_mem_timeseries_max(),
-                         "MIN_MEM": get_all_mem_timeseries_min(),
-                         "MAX_CPU": get_all_cpu_timeseries_max(),
-                         "MIN_CPU": get_all_cpu_timeseries_min()
+                         #"MAX_SWAP": get_all_swap_used_timeseries_max(),
+                         #"MIN_SWAP": get_all_swap_used_timeseries_min(),
+                         #"MAX_STORAGE": get_all_storage_timeseries_max(),
+                         #"MIN_STORAGE": get_all_storage_timeseries_min(),
+                         #"MAX_MEM": get_all_mem_timeseries_max(),
+                         #"MIN_MEM": get_all_mem_timeseries_min(),
+                         #"MAX_CPU": get_all_cpu_timeseries_max(),
+                         #"MIN_CPU": get_all_cpu_timeseries_min()
                          })
 
 
