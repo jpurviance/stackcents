@@ -269,7 +269,7 @@ var master_theme = {
     maskColor: 'rgba(255,255,255,0.3)'
 };
 
-var multi_chat;
+var multi_chart;
 
 function populate_cloud_stats(json) {
     $("#ec2_total").empty();
@@ -286,7 +286,7 @@ function populate_cloud_stats(json) {
 
 function draw_multi_chart(data) {
     Highcharts.theme = master_theme;
-    multi_chat = Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
+    multi_chart = Highcharts.chart('total', Highcharts.merge(Highcharts.theme, {
 
         title: {
             text: "AWS Cluster Resource Consumption"
@@ -380,7 +380,8 @@ $(document).ready(function () {
         draw.push({"name": "CPU", "data": data["CPU"]});
         draw.push({"name": "Memory", "data": data["MEM"]});
         draw.push({"name": "Disk Read-Write", "data": data["STORAGE"]});
-        multi_chat.update({series: draw});
+        console.log(multi_chart);
+        multi_chart.series[0].setData(draw,true);
     }), 5000);
 
 });
