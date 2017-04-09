@@ -114,3 +114,36 @@ def decide_rec(process):
                                                                                        "pay when the function is run.")
     else:
         return None, None
+
+def decide_instance_rec(instance):
+    if should_recommend_bigger_instance(instance):
+        return "You should consider a larger tier instance because your instance spends most of its life at the " \
+               "hardware limitations", "A larger tier node would allow you to give amazon more money "
+    return None, None
+
+def get_recommendation_process(process, default):
+    rec, just = decide_rec(process)
+    if not rec:
+        rec ,just = default
+    return {"recommendation": rec, "justification": just}
+
+def get_recommendation_instance(instance, default):
+    rec, just = decide_rec(instance)
+    if not rec:
+        rec, just = default
+    return {"recommendation": rec, "justification": just}
+
+def get_top_25_cpu_rec(process):
+    return get_recommendation_process(process, ("default top 25 cpu", "this is a default"))
+
+def get_bottom_25_cpu_rec(process):
+    return get_recommendation_process(process, ("default bottom 25 cpu", "this is a default"))
+
+def get_top_25_mem_rec(process):
+    return get_recommendation_process(process, ("default top 25 memory", "this is a default"))
+
+def get_bottom_25_mem_rec(process):
+    return get_recommendation_process(process, ("default bottom 25 memory", "this is a default"))
+
+
+
