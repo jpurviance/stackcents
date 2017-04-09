@@ -126,11 +126,24 @@ def decide_rec(process):
         return None, None
 
 def should_add_disk_space(instance):
-    return float(instance['disk']['percent']) >= 70
+    return float(instance['disk']['percent']) >= 90
+
+def decide_disk_space(instance):
+    if should_add_disk_space(instance):
+        return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
+               "disk utilization and will soon run out of space."
+    return None, None
 
 def should_pay_upfront(instance):
     #return float(instance['meta']['uptime']) > 24000000
     return float(instance['meta']['uptime']) > 86400
+
+def decide_instance_upfront(instance):
+    if should_pay_upfront(instance):
+        return "You should consider making this a reserved instance.", "Since this instance has been running for " \
+               "almost a year, it would have been cheaper to pay the reserved pricing than on demand pricing. Note that " \
+               "this hack only checks for an uptime of over a day as a proof of concept."
+    return None, None
 
 def decide_instance_rec(instance):
     if should_recommend_bigger_instance(instance):
