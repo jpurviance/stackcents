@@ -222,7 +222,7 @@ def get_mongop(process):
 
 
 def get_postgres(process):
-    if process[0]["name"] != "postgres":
+    if process[0]["name"] != "postmaster":
         return None
     mx = max([float(proc['cpu_percent']) for proc in process])
     return {'cpu_percent': mx}
