@@ -96,13 +96,23 @@ def should_use_specific_db(instance):
         return False
     return float(mongo['cpu_percent']) >= 70
 
-def should_lambda(instance):
-    #lambda_list = []
-    process_list = instance['processes']
-    for process in process_list:
-        mx = max(proc['cpu_percent'] for proc in process)
-        md = statistics.median(proc['cpu_percent'] for proc in process)
-        if float(mx) - float(md) >= 70:
-            return True
-    return False     
+def should_lambda(process:
+    mx = max((proc['cpu_percent'] for proc in process))
+    md = statistics.median((proc['cpu_percent'] for proc in process))
+    return float(mx) - float(md) >= 70:
 
+def decide_rec(process):
+    if should_use_specific_db(process):
+        return ("you should consider running this as a specific database instance (insert AWS jargon here)"
+                , "This process is taking up high usage on the system so would be cheaper to run as a standalone "
+                  "database with (AWS service)")
+    if should_lambda(process):
+        return ("you should consider running this function as an AWS lambda function", "This process has occasional "
+                                                                                       "need of the instances "
+                                                                                       "resources but has period of "
+                                                                                       "downtime where there are is "
+                                                                                       "no load. Running this as a "
+                                                                                       "lambda would allow you to only "
+                                                                                       "pay when the function is run.")
+    else:
+        return None, None
