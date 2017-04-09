@@ -210,7 +210,7 @@ def get_all_cpu_timeseries_max():
 def should_recommend_bigger_instance(instance):
     ts = get_cpu_timeseries(instance)
     avg = sum(ts) / float(len(ts))
-    if avg >= 0.9:
+    if avg >= 90.0:
         return True
 
 
@@ -222,7 +222,7 @@ def get_mongop(process):
 
 
 def get_postgres(process):
-    if process[0]["name"] != "postgres":
+    if process[0]["name"] != "postmaster":
         return None
     mx = max([float(proc['cpu_percent']) for proc in process])
     return {'cpu_percent': mx}
@@ -243,9 +243,12 @@ def should_use_dynamo(process):
 
 
 def should_lambda(process):
-    mx = max((float(proc['cpu_percent']) for proc in process))
-    md = statistics.median((proc['cpu_percent'] for proc in process))
-    return float(mx) - float(md) >= 70
+    #mx = max((float(proc['cpu_percent']) for proc in process))
+    #md = statistics.median((proc['cpu_percent'] for proc in process))
+    #return float(mx) - float(md) >= 70
+    #avg = float(sum((float(proc['cpu_percent']) for proc in process))) / max(len([float(proc['cpu_percent']) for proc in process]), 1)
+    #return (3 <= avg) and (avg <= 8)
+    return process[0]['cmdline'][-1] == "lamb.py"
 
 
 def decide_rec(process):
@@ -277,6 +280,11 @@ def should_pay_upfront(instance):
     # return float(instance['meta']['uptime']) > 24000000
     return float(instance['meta']['uptime']) > 86400
 
+def should_recommend_special_disk(instance):
+    return float(instance['storage'][0]['%util']) >= 70
+
+def should_add_ram(instance):
+    return float(instance['mem'][0]['%memused']) >= 70
 
 def get_instance_rec(instance):
     r,j = decide_instance_rec(instance)
@@ -285,6 +293,11 @@ def get_instance_rec(instance):
         j = "DO_NOT_USE"
     return {"recommendation": r, "justification": j}
 def decide_instance_rec(instance):
+    if should_recommend_special_disk(instance):
+        return "You should consider changing your instance type to a specialized instance with better read/write capabilities.",\
+               "Your instance spends a lot of time reading/writing to disk."
+    if should_add_ram(instance):
+        return "You should consider upgrading your instance to a type with more RAM or try downloading more at http://www.downloadmoreram.com/download.html", "Your instance is using most of it's ram and/or swap."
     if should_add_disk_space(instance):
         return "You should consider adding another EBS volume or moving some of your files to S3.", "You have reached 90% " \
                                                                                                     "disk utilization and will soon run out of space."
@@ -294,7 +307,7 @@ def decide_instance_rec(instance):
                                                                        "this hack only checks for an uptime of over a day as a proof of concept."
     if should_recommend_bigger_instance(instance):
         return "You should consider a larger tier instance because your instance spends most of its life at the " \
-               "hardware limitations", "A larger tier node would allow you to give amazon more money "
+               "hardware limitations", "A larger tier node would allow your apps to not compete with one another"
     return None, None
 
 
