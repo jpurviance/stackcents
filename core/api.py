@@ -6,7 +6,7 @@ from django.views.decorators.csrf import csrf_exempt
 
 from utils import EC2, get_json, get_all, get_cpu, get_all_cpu_timeseries, get_all_mem_timeseries, \
     get_all_storage_timeseries, get_cpu_timeseries, get_memory_timeseries, get_storage_timeseries, get_top_25_cpu, \
-    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem
+    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem, get_all_swap_used_timeseries, get_swap_used_timeseries
 
 
 @csrf_exempt
@@ -120,7 +120,7 @@ def get_instance_details(request):
 @csrf_exempt
 def get_all_time_series(request):
     return JsonResponse({"CPU": get_all_cpu_timeseries(), "MEM": get_all_mem_timeseries(),
-                         "STORAGE": get_all_storage_timeseries()})
+                         "STORAGE": get_all_storage_timeseries(), "SWAP": get_all_swap_used_timeseries()})
 
 
 @csrf_exempt
@@ -139,7 +139,7 @@ def get_time_series(request):
         instance = EC2.objects.get(name=instance)
         data = get_json(instance)
         return JsonResponse({"id": name, "CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
-                             "STORAGE": get_storage_timeseries(data)})
+                             "STORAGE": get_storage_timeseries(data), "SWAP": get_swap_used_timeseries(data)})
     except EC2.DoesNotExist:
 
         return HttpResponse(status=400)
