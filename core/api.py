@@ -6,7 +6,8 @@ from django.views.decorators.csrf import csrf_exempt
 
 from utils import EC2, get_json, get_all, get_cpu, get_all_cpu_timeseries, get_all_mem_timeseries, \
     get_all_storage_timeseries, get_cpu_timeseries, get_memory_timeseries, get_storage_timeseries, get_top_25_cpu, \
-    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem, get_all_swap_used_timeseries, get_swap_used_timeseries
+    get_bot_25_cpu, get_top_25_mem, get_bottom_25_mem, get_all_swap_used_timeseries, get_swap_used_timeseries, \
+    get_all_storage_timeseries_max
 
 
 @csrf_exempt
@@ -139,7 +140,9 @@ def get_time_series(request):
         instance = EC2.objects.get(name=instance)
         data = get_json(instance)
         return JsonResponse({"id": name, "CPU": get_cpu_timeseries(data), "MEM": get_memory_timeseries(data),
-                             "STORAGE": get_storage_timeseries(data), "SWAP": get_swap_used_timeseries(data)})
+                             "STORAGE": get_storage_timeseries(data),
+                             "MAX_STORAGE":get_all_storage_timeseries_max(),
+                             "SWAP": get_swap_used_timeseries(data)})
     except EC2.DoesNotExist:
 
         return HttpResponse(status=400)
